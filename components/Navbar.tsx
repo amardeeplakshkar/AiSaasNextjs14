@@ -27,18 +27,6 @@ const NAVBAR = [
         path: "/image",
         color: "text-pink-500",
       },
-    //   {
-    //     label: "Video Generation",
-    //     icon: VideoIcon,
-    //     path: "/video",
-    //     color: "text-orange-500",
-    //   },
-    //   {
-    //     label: "Music Generation",
-    //     icon: Music,
-    //     path: "/music",
-    //     color: "text-emerald-500",
-    //   },
       {
         label: "Code Generation",
         icon: Code,
@@ -49,10 +37,14 @@ const NAVBAR = [
 
 const Navbar = () => {
     const pathName = usePathname();
+    const currentLabel = NAVBAR.find(item => item.path === pathName)?.label || '';
     return (
         <>
-            <nav className='bg-green-100 rounded-full m-1 flex justify-between items-center p-1'>
-                <div className='bg-black/10 rounded-full p-2'><BotIcon /></div>
+            <nav className='bg-white shadow-lg rounded-full m-1 mb-0 flex justify-between items-center p-1'>
+                <div className='bg-green-500/25 rounded-full p-2'><BotIcon /></div>
+                <p className='text-sm font-semibold'>
+                    {currentLabel}
+                </p>
                 <Sheet>
                     <SheetTrigger asChild>
                         <div className="p-2 cursor-pointer"><FaBars /></div>

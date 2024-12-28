@@ -5,8 +5,6 @@ import { usePollinationsChat } from '@pollinations/react';
 import { ChatMessage } from '@/components/ChatMessage';
 import { ChatInput } from '@/components/ChatInput';
 import 'katex/dist/katex.min.css';
-import SectionHead from '@/components/SectionHead';
-import { MessageSquare } from 'lucide-react';
 
 function App() {
   const { sendUserMessage, messages } = usePollinationsChat([
@@ -27,14 +25,7 @@ With a combination of skills in full stack development, particularly the MERN st
     <div className="flex flex-col h-[92dvh] overflow-x-hidden">
       <main className="flex-1 overflow-y-auto p-4 space-y-4">
         <div className="max-w-3xl mx-auto overflow-y-auto p-4 space-y-6">
-          {messages.length <= 1 ? (
-            <SectionHead
-              Icon={MessageSquare}
-              label="conversation"
-              about="Engage in dynamic and insightful chats with our smart AI assistant."
-              color="yellow-500"
-            />
-          ) : messages.slice(1).map((msg, index) => (
+          {messages.slice(1).map((msg, index) => (
             <ChatMessage
               key={index}
               role={msg.role === 'user' ? 'user' : 'assistant'}
