@@ -5,8 +5,7 @@ import { usePollinationsChat } from '@pollinations/react';
 import { ChatMessage } from '@/components/ChatMessage';
 import { ChatInput } from '@/components/ChatInput';
 import 'katex/dist/katex.min.css';
-import { Code } from 'lucide-react';
-import SectionHead from '@/components/SectionHead';
+import SectionCard from '@/components/SectionCard';
 
 function App() {
   const { sendUserMessage, messages } = usePollinationsChat([
@@ -24,12 +23,7 @@ function App() {
       <main className="flex-1 overflow-y-auto p-4 space-y-4">
         <div className="max-w-3xl mx-auto overflow-y-auto p-4 space-y-6">
           {messages.length <= 1 ? (
-            <SectionHead
-              Icon={Code}
-              label="Code Generation"
-              about="Chat with our AI for quick and efficient code generation."
-              color="yellow-500"
-            />
+           <SectionCard/>
           ) : messages.slice(1).map((msg, index) => (
             <ChatMessage
               key={index}

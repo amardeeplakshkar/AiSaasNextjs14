@@ -71,7 +71,7 @@ const renderers = {
         </th>
     ),
     a: ({ href, children }: { href: string; children: React.ReactNode }) => (
-        <a href={href} className="text-blue-700 hover:underline" target="_blank" rel="noopener noreferrer">
+        <a href={href} className="text-blue-700 hover:underline" target="" rel="noopener noreferrer">
             {children}
         </a>
     ),
@@ -93,7 +93,7 @@ const renderers = {
     h5: ({ children }: { children: React.ReactNode }) => (
         <h5 className="text-sm font-bold my-2">{children}</h5>
     ),
-    p: ({ children }: { children: React.ReactNode }) => <p className="m-0">{children}</p>,
+    span: ({ children }: { children: React.ReactNode }) => <span className="m-0">{children}</span>,
     h6: ({ children }: { children: React.ReactNode }) => (
         <h6 className="text-xs font-bold my-2">{children}</h6>
     ),
@@ -107,7 +107,7 @@ const renderers = {
         <li className="text-sm">{children}</li>
     ),
     blockquote: ({ children }: { children: React.ReactNode }) => (
-        <blockquote className="border-l-4 pl-4 italic text-gray-600 my-4">
+        <blockquote className="border-blue-500 border-l-4 pl-4 italic text-gray-600 my-4">
             {children}
         </blockquote>
     ),
@@ -124,46 +124,48 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ role, content }) => {
 
     return (
         <div className={`flex gap-4 ${isUser ? 'justify-end' : 'justify-start'}`}>
-            <div className={` gap-3 flex flex-col max-w-[100%] ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isUser ? 'bg-blue-500 self-end' : 'bg-green-500'
+            <div className={` gap-1 flex flex-col max-w-[100%] ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isUser ? ' self-end' : ''
                     }`}>
-                    {isUser ? <UserAvatar /> : <BotAvatar />}
+                    <div className=''>
+                        {isUser ? <UserAvatar /> : <BotAvatar />}
+                    </div>
                 </div>
                 <div className={`prose prose-sm max-w-none p-4 rounded-lg ${isUser
                     ? 'bg-blue-500 text-white prose-invert'
                     : 'bg-gray-100 text-gray-900'
                     }`}>
                     {!isUser ? <ReactMarkdown
-                        className="text-sm"
+                        className="text-sm flex flex-col gap-2"
                         remarkPlugins={[remarkMath, remarkGfm, remarkToc]}
                         rehypePlugins={[rehypeKatex]}
                         components={{
                             ...renderers,
-                            p: ({ children }) => <p className="m-0">{children}</p>,
+                            p: ({ children }) => <p className="">{children}</p>,
                         }}
                     >
                         {content}
                     </ReactMarkdown> : content.length <= 25 ? <ReactMarkdown>
                         {content}
                     </ReactMarkdown> :
-                    <>
-                        <Accordion type='single' collapsible>
-                            <AccordionItem value='1'>
-                                <AccordionTrigger className=' text-ellipsis flex  items-center  p-0'>
-                                    <ReactMarkdown>
-                                        {`${content.slice(0,25)}...`}
-                                    </ReactMarkdown>
-                                </AccordionTrigger>
-                                <AccordionContent className=' bg-black/30 text-xs text-white  p-2 rounded'>
-                                    <ReactMarkdown
-                                        className="text-sm overflow-x-auto"
-                                    >
-                                        {content}
-                                    </ReactMarkdown>
-                                </AccordionContent>
-                            </AccordionItem>
-                        </Accordion>
-                    </>
+                        <>
+                            <Accordion type='single' collapsible>
+                                <AccordionItem value='1'>
+                                    <AccordionTrigger className=' text-ellipsis flex  items-center  p-0'>
+                                        <ReactMarkdown>
+                                            {`${content.slice(0, 25)}...`}
+                                        </ReactMarkdown>
+                                    </AccordionTrigger>
+                                    <AccordionContent className=' bg-black/30 text-xs text-white  p-2 rounded'>
+                                        <ReactMarkdown
+                                            className="text-sm overflow-x-auto"
+                                        >
+                                            {content}
+                                        </ReactMarkdown>
+                                    </AccordionContent>
+                                </AccordionItem>
+                            </Accordion>
+                        </>
                     }
                 </div>
             </div>

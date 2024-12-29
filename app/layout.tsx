@@ -3,7 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import Navbar from "@/components/Navbar";
-// import Script from "next/script";
+import { ClerkLoaded, ClerkLoading, ClerkProvider } from '@clerk/nextjs'
+import Loader from "@/components/Loader";
+// import { dark } from '@clerk/themes'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,22 +28,33 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <head>
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" />
-      {/* <Script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></Script> */}
-      </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Navbar/>
-        {children}
-        <Toaster
-        containerClassName="text-xs"
-          position="top-center"
-          reverseOrder={false}
-        />
-      </body>
-    </html>
+    <ClerkProvider
+      appearance={{
+        baseTheme: [],
+      }}
+    >
+      <html lang="en">
+        <head>
+        </head>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased relative mt-[3rem]`}
+        >
+          <ClerkLoading>
+            <Loader />
+          </ClerkLoading>
+          <ClerkLoaded>
+            <div className="fixed top-0 z-50 w-full">
+              <Navbar />
+            </div>
+            {children}
+          </ClerkLoaded>
+          <Toaster
+            containerClassName="text-xs"
+            position="top-center"
+            reverseOrder={false}
+          />
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

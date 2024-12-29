@@ -4,10 +4,10 @@ import React, { useState } from "react";
 import { usePollinationsImage } from "@pollinations/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ImageIcon, Loader } from "lucide-react";
+import {  Loader } from "lucide-react";
 import { FaDownload, FaInfoCircle } from "react-icons/fa";
-import SectionHead from "@/components/SectionHead";
 import { ChatInput } from "@/components/ChatInput";
+import SectionCard from "@/components/SectionCard";
 
 const ImageComponent = () => {
     const [submittedPrompt, setSubmittedPrompt] = useState("");
@@ -37,12 +37,7 @@ const ImageComponent = () => {
         <div className="flex flex-col h-[92dvh] overflow-x-hidden">
             <main className="flex-1 overflow-y-auto p-4 space-y-4">
                 <div className="max-w-3xl mx-auto overflow-y-auto p-4 space-y-6">
-                    <SectionHead
-                        Icon={ImageIcon}
-                        label="Image Generation"
-                        about="Unleash the power of imagination with our advanced AI image generator."
-                        color="pink-500"
-                    />
+                    <SectionCard/>
                     <div className="mt-4 flex justify-center items-center">
                         {submittedPrompt ? (
                             <div className="flex flex-col items-center">
