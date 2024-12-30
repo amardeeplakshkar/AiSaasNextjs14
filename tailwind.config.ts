@@ -32,7 +32,13 @@ export default {
 	safelist: generateSafelist(),
 	theme: {
 		extend: {
+			fontSize: {
+				'chat-title': ['2.5rem', '1.2'],
+			  },
 			colors: {
+				'chat-dark': '#0A2725',
+				'chat-card': 'rgba(19, 45, 43, 0.5)',
+				'chat-border': 'rgba(255, 255, 255, 0.1)',
 				background: "hsl(var(--background))",
 				foreground: "hsl(var(--foreground))",
 				card: {

@@ -3,6 +3,8 @@ import {
   Settings
 } from "lucide-react";
 
+export const MAX_FREE_SIZE = 5
+
 export const NAVBAR = [
   {
     label: "Dashboard",
@@ -68,6 +70,6 @@ export const TOOLS = [
     icon: LucideNewspaper,
     color: "text-sky-700",
     bgColor: "bg-sky-700/10",
-    href: "",
+    href: "/soon",
   },
 ]

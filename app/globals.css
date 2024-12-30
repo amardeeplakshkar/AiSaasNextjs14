@@ -7,6 +7,15 @@ body {
   outline: none;
 }
 
+body {
+  background-color: var(--dark-green);
+}
+
+.feature-card {
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
