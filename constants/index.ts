@@ -3,7 +3,7 @@ import {
   Settings
 } from "lucide-react";
 
-export const MAX_FREE_SIZE = 5
+export const MAX_FREE_COUNTS = 25
 
 export const NAVBAR = [
   {

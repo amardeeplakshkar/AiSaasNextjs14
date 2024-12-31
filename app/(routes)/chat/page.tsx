@@ -8,6 +8,7 @@ import 'katex/dist/katex.min.css';
 import SectionCard from '@/components/SectionCard';
 
 function App() {
+  
   const { sendUserMessage, messages } = usePollinationsChat([
     {
       role: "system",

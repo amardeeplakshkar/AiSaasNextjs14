@@ -1,43 +1,69 @@
 'use client'
 
-import React from 'react';
-import { usePollinationsChat } from '@pollinations/react';
-import { ChatMessage } from '@/components/ChatMessage';
-import { ChatInput } from '@/components/ChatInput';
-import 'katex/dist/katex.min.css';
+import { useAuth } from "@clerk/nextjs";
+import { useState } from "react";
+import { toast } from 'react-hot-toast';
 
-function App() {
-  const { sendUserMessage, messages } = usePollinationsChat([
-    {
-      role: "system",
-      content: `You are an AI language model named Edith, created by Amardeep Lakshkar, designed to assist with a wide range of questions and tasks. You can provide information, answer queries, help with programming, explain concepts, and much more. Your primary goal is to help users find the information they need or assist them in completing their tasks. If anyone has any questions or needs assistance with something specific, they can feel free to ask!You are a helpful AI assistant. You can use LaTeX for mathematical expressions by wrapping them in $ for inline math or $$ for display math.
-      Amardeep Lakshkar is a full stack web developer proficient in the MERN stack, which consists of MongoDB, Express.js, React.js, and Node.js. This set of technologies enables him to build robust web applications by working on both the front-end (client-side) and back-end (server-side).
-As a MERN stack developer, he specializes in creating interactive user interfaces using React, managing server-side logic with Node and Express, and handling data storage and retrieval with MongoDB.
-In addition to his expertise in traditional web development, Amardeep is also enthusiastic about Web3 and blockchain technologies. Web3 represents the next generation of the internet, emphasizing decentralization, user ownership, and peer-to-peer interactions. His interest in blockchain may include exploring smart contracts, decentralized applications (dApps), and cryptocurrencies, which are changing how digital transactions and data management occur.
-With a combination of skills in full stack development, particularly the MERN stack, and a keen interest in emerging blockchain technologies, Amardeep is well-equipped to contribute to modern web development projects that push the boundaries of the digital landscape. in paragraphs make sure to take line breaks.`
+const ApiLimitComponent = () => {
+  const [limitCount, setLimitCount] = useState<number | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  
+  const { userId } = useAuth();
+
+  const handleCheckLimit = async () => {
+    const response = await fetch(`/api/user?userId=${userId}`);
+    const data = await response.json();
+    if (response.ok) {
+      const message = data.hasExceededLimit
+        ? "Limit exceeded"
+        : "Within the free limit";
+      toast(message, { icon: '👍' });
+    } else {
+      toast.error(data.error);
     }
-  ], {
-    seed: 100,
-    model: 'openai'
-  });
+  };
+
+  const handleGetLimit = async () => {
+    setErrorMessage(null); // Clear any previous error
+    const response = await fetch(`/api/getLimit?userId=${userId}`);
+    const data = await response.json();
+
+    if (response.ok) {
+      setLimitCount(data.count); // Set the API limit count
+      toast.success(`API limit count: ${data.count}`);
+    } else {
+      setErrorMessage(data.error); // Display error message
+      toast.error(data.error); // Show error toast
+      setLimitCount(null); // Reset limit count
+    }
+  };
+
+  const handleIncrementLimit = async () => {
+    const response = await fetch("/api/user", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId }),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      toast.success("API limit incremented successfully");
+    } else {
+      toast.error(data.error);
+    }
+  };
 
   return (
-    <div className="flex flex-col h-[92dvh] overflow-x-hidden">
-      <main className="flex-1 overflow-y-auto p-4 space-y-4">
-        <div className="max-w-3xl mx-auto overflow-y-auto p-4 space-y-6">
-          {messages.slice(1).map((msg, index) => (
-            <ChatMessage
-              key={index}
-              role={msg.role === 'user' ? 'user' : 'assistant'}
-              content={msg.content}
-            />
-          ))}
-        </div>
-      </main>
-
-      <ChatInput onSend={sendUserMessage} />
+    <div>
+      <button className="bg-red-500 p-2 m-1" onClick={handleCheckLimit}>Check API Limit</button>
+      <button onClick={handleGetLimit}>Get API Limit</button>
+      {limitCount !== null && <p>API limit count: {limitCount}</p>}
+      {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+      <button className="bg-red-500 p-2 m-1" onClick={handleIncrementLimit}>Increment API Limit</button>
     </div>
   );
-}
+};
 
-export default App;
+export default ApiLimitComponent;

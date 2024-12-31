@@ -48,7 +48,7 @@
 // export default dashboardPage;
 
 "use client"
-import React from 'react';
+import React, { useState } from 'react';
 import { Crown } from 'lucide-react';
 import { UserAvatar } from '@/components/Avatar';
 import PopularPrompts from '@/components/ui/PopularPrompts';
@@ -56,9 +56,10 @@ import FeatureCard from '@/components/ui/FeatureCard';
 import { useUser } from '@clerk/nextjs';
 import { Button } from '@/components/ui/button';
 import { TOOLS } from '@/constants';
+import { ProModal } from '@/components/ProModal';
 
 const ChatInterface = () => {
-
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const { user } = useUser();
 
   return (
@@ -70,7 +71,7 @@ const ChatInterface = () => {
             {user?.fullName}
           </p>
         </div>
-        <Button variant={"premium"} className='bg-chat-card cursor-pointer p-1 px-3 rounded-full  flex justify-center items-center gap-1'> <Crown className=''/> Go Pro</Button>
+        <Button onClick={() => setIsModalOpen(true)} variant={"premium"} className='bg-chat-card cursor-pointer p-1 px-3 rounded-full  flex justify-center items-center gap-1'> <Crown className='' /> Go Pro</Button>
       </div>
       <div className="sm:mt-12 mt-2">
         <h1 className="text-chat-title text-white font-light sm:mb-8 mb-2">
@@ -91,6 +92,10 @@ const ChatInterface = () => {
 
         <PopularPrompts />
       </div>
+      <ProModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)} // Close the modal
+      />
     </div>
   );
 };

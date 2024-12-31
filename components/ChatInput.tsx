@@ -2,6 +2,9 @@
 
 import React, { useState, KeyboardEvent } from 'react';
 import { Send } from 'lucide-react';
+import toast from 'react-hot-toast';
+import { useUser } from '@clerk/nextjs';
+import { ProModal } from './ProModal';
 
 interface ChatInputProps {
   onSend: (message: string) => void;
@@ -9,11 +12,46 @@ interface ChatInputProps {
 
 export const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
   const [input, setInput] = useState('');
+  const { user } = useUser()
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleSend = () => {
+  const handleIncrementLimit = async () => {
+    const response = await fetch("/api/user", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId: user?.id }),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+    } else {
+      toast.error(data.error);
+    }
+  };
+
+  const handleSend = async () => {
     if (input.trim()) {
-      onSend(input.trim());
-      setInput('');
+      try {
+        const response = await fetch(`/api/user?userId=${user?.id}`);
+        const data = await response.json();
+
+        if (response.ok) {
+          if (data.hasExceededLimit) {
+            setIsModalOpen(true);
+            toast.error("You have exceeded your limit.");
+          } else {
+            onSend(input.trim());
+            setInput('');
+            handleIncrementLimit()
+          }
+        } else {
+          toast.error(data.error || "An error occurred while checking the limit.");
+        }
+      } catch (error) {
+        toast.error(`${error} : Failed to check the limit. Please try again.`);
+      }
     }
   };
 
@@ -46,6 +84,10 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
       <p className="text-center text-sm text-gray-500 mt-2">
         Press Enter to send, Shift + Enter for new line
       </p>
+      <ProModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)} // Close the modal
+      />
     </div>
   );
 };

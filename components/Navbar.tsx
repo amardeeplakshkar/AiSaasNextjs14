@@ -11,6 +11,7 @@ import { SignedOut, SignInButton, SignedIn, UserButton, useUser } from '@clerk/n
 import { UserAvatar } from './Avatar'
 import { Button } from './ui/button'
 import { NAVBAR } from '@/constants'
+import { FreeCounter } from './FreeCounter'
 
 const Navbar = () => {
     const pathName = usePathname();
@@ -65,6 +66,8 @@ const Navbar = () => {
                                     )
                                 }
                             </section>
+                            <Separator />
+                            <FreeCounter apiLimitCount={0} isPro={false}/>
                             <Separator />
                             <div>
                                 <div className='flex justify-between items-center'>
