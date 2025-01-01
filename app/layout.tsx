@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   description: "Edith AI provides a suite of AI tools, including image generation, AI conversation, code generation, image transformation, background removal, image ratio cropping, and more to empower users with cutting-edge AI technology.",
   keywords: "AI tools, image generation, AI conversation, AI code generation, image transform, background remover, AI image crop, AI technology, edithai, Edith AI, Amardeep Lakshkar, Amardeep Devs, Amardeep",
   robots: "index, follow",
-  authors: {name: "Amardeep Lakshkar", url: "amardeep-portfolio.vercel.app"},
+  authors: { name: "Amardeep Lakshkar", url: "amardeep-portfolio.vercel.app" },
 };
 
 export default function RootLayout({

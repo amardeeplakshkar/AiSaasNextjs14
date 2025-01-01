@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
 import { TOOLS } from "@/constants";
+import toast from "react-hot-toast";
 
 interface ProModalProps {
   isOpen: boolean;
@@ -53,12 +54,12 @@ export const ProModal = ({
       <DialogContent className="select-none w-[90%] rounded-lg">
         <DialogHeader>
           <DialogTitle className="flex justify-center items-center flex-col gap-y-4 pb-2">
-            <div className="flex items-center gap-x-2 font-bold text-xl">
+            <span className="flex items-center gap-x-2 font-bold text-xl">
               Upgrade to Pro
               <Badge variant="premium" className="uppercase text-sm py-1">
                 pro
               </Badge>
-            </div>
+            </span>
           </DialogTitle>
           <DialogDescription className="text-center pt-2 space-y-2 text-zinc-900 font-medium">
             {loading ? (
@@ -72,22 +73,22 @@ export const ProModal = ({
                 Upgrade to Pro for unlimited generations.
               </span>
             )}
-            <div>
+            <span>
               {
                 TOOLS.map((e, i) =>
-                  <div key={i} className={cn(
+                  <span key={i} className={cn(
                     "text-sm group flex p-3 w-full justify-between font-medium transition  rounded-lg",
                     "text-primary bg-white/10"
                   )}
                   >
-                    <div className="flex items-center flex-1 ">
+                    <span className="flex text-xs items-center flex-1 ">
                       <e.icon className={cn("h-5 mr-3 w-5", `${e.color}`)} />
                       {e.label}
-                    </div>
+                    </span>
                     <Badge variant={"premium"}>Unlimited</Badge>
-                  </div>
+                  </span>
                 )}
-            </div>
+            </span>
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
@@ -95,7 +96,9 @@ export const ProModal = ({
             size="lg"
             variant="premium"
             className="w-full"
-            onClick={() => console.log("Upgrade button clicked")} // Handle Upgrade button click
+            onClick={() => toast('Feature will be introduced in the next update!', {
+              icon: '👏',
+            })} // Handle Upgrade button click
             disabled={loading} // Disable button during loading
           >
             Upgrade

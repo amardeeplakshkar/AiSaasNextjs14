@@ -128,7 +128,10 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ role, content }) => {
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isUser ? ' self-end' : ''
                     }`}>
                     <div className=''>
-                        {isUser ? <UserAvatar /> : <BotAvatar />}
+                        {isUser ? <UserAvatar /> : 
+                        <>
+                            <BotAvatar />
+                        </>}
                     </div>
                 </div>
                 <div className={`prose prose-sm max-w-none p-4 rounded-lg ${isUser

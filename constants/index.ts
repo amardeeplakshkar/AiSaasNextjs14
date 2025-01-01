@@ -1,6 +1,8 @@
 import {
   Code, ImageIcon, LayoutDashboard, LucideNewspaper, MessageSquare,
-  Settings
+  SearchIcon,
+  Settings,
+  UsersRound
 } from "lucide-react";
 
 export const MAX_FREE_COUNTS = 25
@@ -35,12 +37,26 @@ export const NAVBAR = [
     color: "green-500",
   },
   {
+    label: "Search GPT",
+    icon:  SearchIcon,
+    path: "/searchgpt",
+    about: "Engage in real-time news and info conversations.",
+    color: "blue-700",
+  }, 
+  {
+    label: "AI Companions",
+    icon:  UsersRound,
+    color: "orange-700",
+    about: "Engage in real-time news and info conversations.",
+    path: "/companions",
+  },
+  {
     label: "Settings",
     icon: Settings,
     path: "/settings",
     about: "Customize your AI app settings and preferences.",
     color: "zinc-200",
-  },  
+  },
 ]
 
 export const TOOLS = [
@@ -64,6 +80,20 @@ export const TOOLS = [
     color: "text-green-700",
     bgColor: "bg-green-700/10",
     href: "/code",
+  },
+  {
+    label: "Search GPT",
+    icon:  SearchIcon,
+    color: "text-blue-700",
+    bgColor: "bg-blue-700/10",
+    href: "/searchgpt",
+  },
+  {
+    label: "AI Companions",
+    icon:  UsersRound,
+    color: "text-orange-700",
+    bgColor: "bg-orange-700/10",
+    href: "/companions",
   },
   {
     label: "Coming Soon",
