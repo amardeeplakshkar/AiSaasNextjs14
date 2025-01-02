@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prismadb";
 import { NextResponse } from "next/server";
 
-// Create a new user with just the userId
+// Create the userApiLimit for the user with initial count
 export async function POST(request: Request) {
   const { userId } = await request.json();
 
@@ -10,26 +10,27 @@ export async function POST(request: Request) {
   }
 
   try {
-    // Check if the user already exists
-    const existingUser = await prisma.user.findUnique({
+    // Check if the userApiLimit already exists for this userId
+    const existingUserApiLimit = await prisma.userApiLimit.findUnique({
       where: { userId },
     });
 
-    if (existingUser) {
-      return NextResponse.json({ error: "User with this ID already exists" }, { status: 400 });
+    if (existingUserApiLimit) {
+      return NextResponse.json({ error: "API limit already exists for this user" }, { status: 400 });
     }
 
-    // Create a new user
-    const newUser = await prisma.user.create({
+    // Create a new userApiLimit record
+    const newUserApiLimit = await prisma.userApiLimit.create({
       data: {
         userId,
+        count: 0,  // Set the initial count (e.g., 1, or whatever default you'd like)
       },
     });
 
-    return NextResponse.json({ message: "User created successfully", user: newUser });
+    return NextResponse.json({ message: "User API limit created successfully", userApiLimit: newUserApiLimit });
 
   } catch (error) {
-    console.error("Error during user creation:", error);
-    return NextResponse.json({ error: "Failed to create user" }, { status: 500 });
+    console.error("Error during user API limit creation:", error);
+    return NextResponse.json({ error: "Failed to create user API limit" }, { status: 500 });
   }
 }
