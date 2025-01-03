@@ -2,10 +2,11 @@ import {
   Code, ImageIcon, LayoutDashboard, LucideNewspaper, MessageSquare,
   SearchIcon,
   Settings,
+  File,
   UsersRound
 } from "lucide-react";
 
-export const MAX_FREE_COUNTS = 25
+export const MAX_FREE_COUNTS = 50
 
 export const NAVBAR = [
   {
@@ -51,6 +52,13 @@ export const NAVBAR = [
     path: "/companions",
   },
   {
+    label: "PDF AI",
+    icon: File,
+    path: "/pdfai",
+    about: "Extract and analyze text from PDF documents with AI.",
+    color: "teal-600",
+  },
+  {
     label: "Settings",
     icon: Settings,
     path: "/settings",
@@ -94,6 +102,13 @@ export const TOOLS = [
     color: "text-orange-700",
     bgColor: "bg-orange-700/10",
     href: "/companions",
+  },
+  {
+    label: "PDF AI",
+    icon: File,
+    color: "text-teal-700",
+    bgColor: "bg-teal-700/10",
+    href: "/pdfai",
   },
   {
     label: "Coming Soon",

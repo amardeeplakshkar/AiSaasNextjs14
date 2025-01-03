@@ -12,22 +12,22 @@ import { ProModal } from '@/components/ProModal';
 const ChatInterface = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { user } = useUser();
+  const primaryEmail = user?.emailAddresses?.[0]?.emailAddress;
 
-  // API call when the component loads
   useEffect(() => {
     const createUser = async () => {
-      if (user?.id) {
+      if (user?.id && user?.username && primaryEmail) {
         try {
           const response = await fetch('/api/create', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ userId: user.id }),
+            body: JSON.stringify({ userId: user.id, username: user.username, email : primaryEmail }),
           });
-
+  
           const data = await response.json();
-
+  
           if (response.ok) {
             console.log('User created successfully:', data);
           } else {
@@ -38,9 +38,10 @@ const ChatInterface = () => {
         }
       }
     };
-
+  
     createUser();
-  }, [user?.id]); // Dependency array to ensure it runs when user.id is available
+  }, [user?.id, user?.username, primaryEmail]);
+  
 
   return (
     <div className="flex -mt-[3rem] pt-[4rem] flex-col min-h-screen p-6 bg-gradient-to-b to-chat-dark from-[#235347]">
@@ -74,7 +75,7 @@ const ChatInterface = () => {
       </div>
       <ProModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)} // Close the modal
+        onClose={() => setIsModalOpen(false)} 
       />
     </div>
   );
