@@ -5,7 +5,6 @@ import { Toaster } from "react-hot-toast";
 import Navbar from "@/components/Navbar";
 import { ClerkLoaded, ClerkLoading, ClerkProvider } from '@clerk/nextjs'
 import Loader from "@/components/Loader";
-// import { dark } from '@clerk/themes'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,8 +36,11 @@ export default function RootLayout({
       }}
     >
       <html lang="en">
-        <head>
-        </head>
+      <script
+          type="text/javascript"
+          async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+        ></script>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased relative mt-[3rem]`}
         >

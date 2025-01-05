@@ -123,9 +123,9 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ role, content }) => {
     const isUser = role === 'user';
 
     return (
-        <div className={`flex gap-4 ${isUser ? 'justify-end' : 'justify-start'}`}>
+        <div className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
             <div className={` gap-1 flex flex-col max-w-[100%] ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${isUser ? ' self-end' : ''
+                <div className={`flex items-center justify-start ${isUser ? ' self-end' : ''
                     }`}>
                     <div className=''>
                         {isUser ? <UserAvatar /> : 
@@ -144,7 +144,6 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ role, content }) => {
                         rehypePlugins={[rehypeKatex]}
                         components={{
                             ...renderers,
-                            p: ({ children }) => <p className="">{children}</p>,
                         }}
                     >
                         {content}
