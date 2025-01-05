@@ -36,7 +36,7 @@ export default function RootLayout({
       }}
     >
       <html lang="en">
-      <script
+        <script
           type="text/javascript"
           async
           src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
@@ -51,7 +51,7 @@ export default function RootLayout({
             <div className="fixed top-0 z-50 w-full">
               <Navbar />
             </div>
-            {children}
+              {children}
           </ClerkLoaded>
           <Toaster
             containerClassName="text-xs"

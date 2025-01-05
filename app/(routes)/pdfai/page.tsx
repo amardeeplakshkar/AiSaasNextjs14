@@ -112,7 +112,7 @@ const App = () => {
   };
 
   return (
-    <div className="flex flex-col space-y-6 p-4">
+    <div className="flex flex-col space-y-6 p-4 max-w-4xl mx-auto">
       <div>
         <div className="flex gap-2">
           <File />

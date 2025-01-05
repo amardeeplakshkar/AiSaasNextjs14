@@ -3,7 +3,9 @@ import React from 'react'
 
 const page = () => {
   return (
-    <PricingCard/>
+    <div className='flex-col bg-chat-dark h-dvh -mt-[3rem] pt-[3rem] w-dvw flex'>
+        <PricingCard/>
+    </div>
   )
 }
 

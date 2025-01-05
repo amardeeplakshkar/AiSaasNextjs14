@@ -45,8 +45,8 @@ const PricingCard = () => {
     ];
 
     return (
-        <div className='flex text-xs sm:flex-row justify-center items-center gap-2 flex-col'>
-            <div className='rounded-xl min-h-[16.5rem] h-full text-white/90 p-4 flex flex-col gap-2 bg-[#243131]'>
+        <div className='flex text-base sm:flex-row justify-center items-center gap-2 flex-col'>
+            <div className='rounded-xl h-full text-white/90 p-4 flex flex-col gap-2 bg-[#243131]'>
                 <div className='flex flex-1 justify-between items-center'>
                     <div className='p-1 px-5 border border-[#8ce3bf] rounded-md'>Basic</div>
                     <div>Free</div>
@@ -60,15 +60,15 @@ const PricingCard = () => {
                             <li key={i} className='flex items-center gap-1'><CheckCircle2 className='text-[#8ce3bf]' size={'1rem'} />{item.item}</li>
                         )}
                 </ul>
-                <button className='border border-[#8ce3bf] p-2 rounded-full'>Get Started</button>
+                <button className='border opacity-20 border-[#8ce3bf] p-2 rounded-full'>Free</button>
             </div>
 
             {/* PRO PRICING CARD */}
 
-            <div className='border rounded-xl min-h-[16.5rem]  h-full text-white/90 border-[#8ce3bf] p-4 flex flex-col gap-2 bg-[#243131]'>
+            <div className='border rounded-xl  h-full text-white/90 border-[#8ce3bf] p-4 flex flex-col gap-2 bg-[#243131]'>
                 <div className='flex flex-1 justify-between items-center'>
                     <div className='p-1 px-5 text-[#243131] bg-[#8ce3bf] rounded-md'>Pro</div>
-                    <div><span className='text-xl'>$19</span>/month</div>
+                    <div><span className='text-xl'>$4.99</span>/month</div>
                 </div>
                 <p>
                     Upgrade to our Pro Plan: ideal for growing businesses.

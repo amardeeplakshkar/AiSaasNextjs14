@@ -6,7 +6,11 @@ import {
   UsersRound
 } from "lucide-react";
 
-export const MAX_FREE_COUNTS = 50
+export const MAX_FREE_COUNTS =100
+
+export function absoluteUrl(path: string){
+return `${process.env.NEXT_PUBLIC_APP_URL}${path}`
+}
 
 export const NAVBAR = [
   {

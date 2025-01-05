@@ -30,16 +30,16 @@ export const ProModal = ({
       if (isOpen) {
         setLoading(true);
         try {
-          const response = await fetch(`/api/user?userId=${userId}`); // API call to check limit
+          const response = await fetch(`/api/user?userId=${userId}`); 
           const data = await response.json();
           if (response.ok) {
-            setIsLimitReached(data.hasExceededLimit); // Set the limit status
+            setIsLimitReached(data.hasExceededLimit); 
           } else {
-            setIsLimitReached(false); // Default to false in case of error
+            setIsLimitReached(false); 
           }
         } catch (error) {
           console.error("Error fetching API limit", error);
-          setIsLimitReached(false); // Default to false if an error occurs
+          setIsLimitReached(false); 
         } finally {
           setLoading(false);
         }
@@ -98,8 +98,8 @@ export const ProModal = ({
             className="w-full"
             onClick={() => toast('Feature will be introduced in the next update!', {
               icon: '👏',
-            })} // Handle Upgrade button click
-            disabled={loading} // Disable button during loading
+            })} 
+            disabled={loading} 
           >
             Upgrade
             <Zap className="w-4 h-4 ml-2 fill-white" />
