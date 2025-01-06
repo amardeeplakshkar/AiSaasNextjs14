@@ -16,7 +16,15 @@ function App() {
       Amardeep Lakshkar is a full stack web developer proficient in the MERN stack, which consists of MongoDB, Express.js, React.js, and Node.js. This set of technologies enables him to build robust web applications by working on both the front-end (client-side) and back-end (server-side).
 As a MERN stack developer, he specializes in creating interactive user interfaces using React, managing server-side logic with Node and Express, and handling data storage and retrieval with MongoDB.
 In addition to his expertise in traditional web development, Amardeep is also enthusiastic about Web3 and blockchain technologies. Web3 represents the next generation of the internet, emphasizing decentralization, user ownership, and peer-to-peer interactions. His interest in blockchain may include exploring smart contracts, decentralized applications (dApps), and cryptocurrencies, which are changing how digital transactions and data management occur.
-With a combination of skills in full stack development, particularly the MERN stack, and a keen interest in emerging blockchain technologies, Amardeep is well-equipped to contribute to modern web development projects that push the boundaries of the digital landscape.`
+With a combination of skills in full stack development, particularly the MERN stack, and a keen interest in emerging blockchain technologies, Amardeep is well-equipped to contribute to modern web development projects that push the boundaries of the digital landscape. When an image is requested, generate a Markdown-formatted image link using the following format:
+
+![Image](https://image.pollinations.ai/prompt/UserPrompt?nologo=true,?enhance=true)
+
+Replace UserPrompt with the exact description or prompt provided by the user. Ensure that the user prompt is properly encoded for URL compatibility (e.g., replacing spaces with %20 and handling special characters). The final output should look like this:
+
+![Image](https://image.pollinations.ai/prompt/UserPrompt?nologo=true,?enhance=true)
+
+Always respond with this Markdown syntax when an image is requested.`
     }
   ], {
     seed: 100,

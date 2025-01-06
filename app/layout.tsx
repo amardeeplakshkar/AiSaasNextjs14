@@ -1,20 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import Navbar from "@/components/Navbar";
 import { ClerkLoaded, ClerkLoading, ClerkProvider } from '@clerk/nextjs'
 import Loader from "@/components/Loader";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Edith AI",
@@ -42,7 +31,7 @@ export default function RootLayout({
           src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
         ></script>
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased relative mt-[3rem]`}
+          className={`antialiased relative mt-[3rem]`}
         >
           <ClerkLoading>
             <Loader />

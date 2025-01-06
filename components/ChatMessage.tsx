@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
+import Image from 'next/image';
 
 interface CodeProps {
     inline?: boolean;
@@ -116,6 +117,9 @@ const renderers = {
     ),
     em: ({ children }: { children: React.ReactNode }) => (
         <em className="italic">{children}</em>
+    ),
+    img: ({ children, src }: { src:string,children: React.ReactNode }) => (
+        <Image alt='' width={300} height={300} src={`${src},?safe=true`} className="rounded-md">{children}</Image>
     ),
 };
 

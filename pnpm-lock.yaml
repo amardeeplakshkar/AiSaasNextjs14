@@ -62,6 +62,9 @@ importers:
       better-react-mathjax:
         specifier: 2.0.4-beta1
         version: 2.0.4-beta1(react@19.0.0)
+      child_process:
+        specifier: ^1.0.2
+        version: 1.0.2
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -119,12 +122,18 @@ importers:
       react-markdown:
         specifier: ^9.0.1
         version: 9.0.1(@types/react@19.0.2)(react@19.0.0)
+      react-say:
+        specifier: ^2.1.0
+        version: 2.1.0(react@19.0.0)
       react-speech-recognition:
         specifier: ^3.10.0
         version: 3.10.0(react@19.0.0)
       react-syntax-highlighter:
         specifier: ^15.6.1
         version: 15.6.1(react@19.0.0)
+      react-text-to-speech:
+        specifier: ^1.1.2
+        version: 1.1.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       rehype-katex:
         specifier: ^7.0.1
         version: 7.0.1
@@ -146,6 +155,9 @@ importers:
       remark-toc:
         specifier: ^9.0.0
         version: 9.0.0
+      say:
+        specifier: ^0.16.0
+        version: 0.16.0
       shadcn-ui:
         specifier: ^0.9.4
         version: 0.9.4(typescript@5.7.2)
@@ -316,6 +328,10 @@ packages:
     engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0-0
+
+  '@babel/runtime@7.15.4':
+    resolution: {integrity: sha512-99catp6bHCaxr4sJ/DbTGgHS4+Rs2RVd2g7iOap6SLGPDknRK9ztKNsE/Fg6QhSeh1FGE5f6gHGQmvvn3I3xhw==}
+    engines: {node: '>=6.9.0'}
 
   '@babel/runtime@7.26.0':
     resolution: {integrity: sha512-FDSOghenHTiToteC/QRlv2q3DhPZ/oOXTBoirfWNx1Cx3TMVcGWQtMMmQcSvb/JjpNeGzx8Pq/b4fKEJuWm1sw==}
@@ -1635,6 +1651,9 @@ packages:
   character-reference-invalid@2.0.1:
     resolution: {integrity: sha512-iBZ4F4wRbyORVsu0jPV7gXkOsGYjGHPmAyv+HiHG8gi5PtC9KI2j1+v8/tlibRvjoWX027ypmG/n0HtO5t7unw==}
 
+  child_process@1.0.2:
+    resolution: {integrity: sha512-Wmza/JzL0SiWz7kl6MhIKT5ceIlnFPJX+lwUGj7Clhy5MMldsSoJR0+uvRzOS5Kv45Mq7t1PoE8TsOA9bzvb6g==}
+
   chokidar@2.1.8:
     resolution: {integrity: sha512-ZmZUazfOzf0Nve7duiCKD23PFSCs4JPoYyccjUFF3aQkQadqBhfzhjkwBH2mNOG9cTBwhamM37EIsIkZw3nRgg==}
 
@@ -1659,6 +1678,9 @@ packages:
 
   class-variance-authority@0.7.1:
     resolution: {integrity: sha512-Ka+9Trutv7G8M6WT6SeiRWz792K5qEqIGEGzXKhAE6xOWAY6pPH8U+9IY3oCMv6kqTmLsv7Xh/2w2RigkePMsg==}
+
+  classnames@2.3.1:
+    resolution: {integrity: sha512-OlQdbZ7gLfGarSqxesMesDa5uz7KFbID8Kpq/SxIoNGDqY8lSYs0D+hhtBXhcdB3rcbXArFr7vlHheLk1voeNA==}
 
   classnames@2.5.1:
     resolution: {integrity: sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==}
@@ -2165,6 +2187,9 @@ packages:
   esutils@2.0.3:
     resolution: {integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==}
     engines: {node: '>=0.10.0'}
+
+  event-as-promise@1.0.5:
+    resolution: {integrity: sha512-z/WIlyou7oTvXBjm5YYjfklr2d8gUWtx8b5GAcrIs1n1D35f7NIK0CrcYSXbY3VYikG9bUan+wScPyGXL/NH4A==}
 
   events@3.3.0:
     resolution: {integrity: sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==}
@@ -3069,6 +3094,9 @@ packages:
   mdast-util-toc@7.1.0:
     resolution: {integrity: sha512-2TVKotOQzqdY7THOdn2gGzS9d1Sdd66bvxUyw3aNpWfcPXCLYSJCCgfPy30sEtuzkDraJgqF35dzgmz6xlvH/w==}
 
+  memoize-one@5.2.1:
+    resolution: {integrity: sha512-zYiwtZUcYyXKo/np96AGZAckk+FWWsUdJ3cHGGmld7+AhvcWmQyGCYUh1hc4Q/pkOhb65dQR/pqCyK0cOaHz4Q==}
+
   memory-fs@0.4.1:
     resolution: {integrity: sha512-cda4JKCxReDXFXRqOHPQscuIYg1PvxbE2S2GP45rnwfEK+vZaXC8C1OFvdHIbgw0DLzowXGVoxLaAmlgRy14GQ==}
 
@@ -3475,6 +3503,9 @@ packages:
   once@1.4.0:
     resolution: {integrity: sha512-lNaJgI+2Q5URQBkccEKHTQOPaXdUxnZZElQTZY0MFUAuaEqe1E+Nyvgdz/aIyNi6Z9MzO5dv1H8n58/GELp3+w==}
 
+  one-time@0.0.4:
+    resolution: {integrity: sha512-qAMrwuk2xLEutlASoiPiAMW3EN3K96Ka/ilSXYr6qR1zSVXw2j7+yDSqGTC4T9apfLYxM3tLLjKvgPdAUK7kYQ==}
+
   onetime@5.1.2:
     resolution: {integrity: sha512-kbpaSSGJTWdAY5KPVeMOKXSrPtr8C8C7wodJbcsd51jRnmD+GZu8Y0VoU6Dm5Z4vWr0Ig/1NKuWRKf7j5aaYSg==}
     engines: {node: '>=6'}
@@ -3832,6 +3863,11 @@ packages:
       '@types/react':
         optional: true
 
+  react-say@2.1.0:
+    resolution: {integrity: sha512-TSGEA1GQuxa3nc9PEO5fvS3XjM1GGXPUTmcAXV2zlxA1w/vLE+gy0eGJPDYg1ovWmkbe+JZamr7BncwqkicKYg==}
+    peerDependencies:
+      react: '>= 16.8.6'
+
   react-speech-recognition@3.10.0:
     resolution: {integrity: sha512-EVSr4Ik8l9urwdPiK2r0+ADrLyDDrjB0qBRdUWO+w2MfwEBrj6NuRmy1GD3x7BU/V6/hab0pl8Lupen0zwlJyw==}
     peerDependencies:
@@ -3851,6 +3887,12 @@ packages:
     resolution: {integrity: sha512-OqJ2/vL7lEeV5zTJyG7kmARppUjiB9h9udl4qHQjjgEos66z00Ia0OckwYfRxCSFrW8RJIBnsBwQsHZbVPspqg==}
     peerDependencies:
       react: '>= 0.14.0'
+
+  react-text-to-speech@1.1.2:
+    resolution: {integrity: sha512-+RKjZt0KhB93RyFBbC09tfQBUzymg1Mua3oA/3v3Nk8gUkeRlHEOUrvxfbnupM23/vNmQcS3cMPWhl9Y3lvLJg==}
+    peerDependencies:
+      react: ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
 
   react@19.0.0:
     resolution: {integrity: sha512-V8AVnmPIICiWpGfm6GLzCR/W5FXLchHop40W4nXBmdlEceh16rCN8O8LNWm5bh5XUX91fh7KpA+W0TgMKmgTpQ==}
@@ -3884,6 +3926,9 @@ packages:
 
   refractor@3.6.0:
     resolution: {integrity: sha512-MY9W41IOWxxk31o+YvFCNyNzdkc9M20NoZK5vq6jkv4I/uh2zkWcfudj0Q1fovjUQJrNewS9NMzeTtqPf+n5EA==}
+
+  regenerator-runtime@0.13.11:
+    resolution: {integrity: sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==}
 
   regenerator-runtime@0.14.1:
     resolution: {integrity: sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw==}
@@ -4012,6 +4057,10 @@ packages:
 
   safe-regex@1.1.0:
     resolution: {integrity: sha512-aJXcif4xnaNUzvUuC5gcb46oTS7zvg4jpMTnuqtrEPlR3vFr4pxtdTwaF1Qs3Enjn9HK+ZlwQui+a7z0SywIzg==}
+
+  say@0.16.0:
+    resolution: {integrity: sha512-yEfncNu3I6lcZ6RIrXgE9DqbrEmvV5uQQ8ReM14u/DodlvJYpveqNphO55RLMSj77b06ZKNif/FLmhzQxcuUXg==}
+    engines: {node: '>=6.9'}
 
   scheduler@0.25.0:
     resolution: {integrity: sha512-xFVuu11jh+xcO7JOAGJNOXld8/TcEHK/4CituBUeUb5hqxJLj9YuemAEuvm9gQ/+pgXYfbQuqAkiYu+u7YEsNA==}
@@ -4910,6 +4959,10 @@ snapshots:
       '@babel/plugin-syntax-typescript': 7.25.9(@babel/core@7.26.0)
     transitivePeerDependencies:
       - supports-color
+
+  '@babel/runtime@7.15.4':
+    dependencies:
+      regenerator-runtime: 0.13.11
 
   '@babel/runtime@7.26.0':
     dependencies:
@@ -6323,6 +6376,8 @@ snapshots:
 
   character-reference-invalid@2.0.1: {}
 
+  child_process@1.0.2: {}
+
   chokidar@2.1.8:
     dependencies:
       anymatch: 2.0.0
@@ -6373,6 +6428,8 @@ snapshots:
   class-variance-authority@0.7.1:
     dependencies:
       clsx: 2.1.1
+
+  classnames@2.3.1: {}
 
   classnames@2.5.1: {}
 
@@ -7012,6 +7069,8 @@ snapshots:
       '@types/unist': 3.0.3
 
   esutils@2.0.3: {}
+
+  event-as-promise@1.0.5: {}
 
   events@3.3.0: {}
 
@@ -8140,6 +8199,8 @@ snapshots:
       unist-util-is: 6.0.0
       unist-util-visit: 5.0.0
 
+  memoize-one@5.2.1: {}
+
   memory-fs@0.4.1:
     dependencies:
       errno: 0.1.8
@@ -8837,6 +8898,8 @@ snapshots:
     dependencies:
       wrappy: 1.0.2
 
+  one-time@0.0.4: {}
+
   onetime@5.1.2:
     dependencies:
       mimic-fn: 2.1.0
@@ -9241,6 +9304,14 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.0.2
 
+  react-say@2.1.0(react@19.0.0):
+    dependencies:
+      '@babel/runtime': 7.15.4
+      classnames: 2.3.1
+      event-as-promise: 1.0.5
+      memoize-one: 5.2.1
+      react: 19.0.0
+
   react-speech-recognition@3.10.0(react@19.0.0):
     dependencies:
       react: 19.0.0
@@ -9262,6 +9333,11 @@ snapshots:
       prismjs: 1.29.0
       react: 19.0.0
       refractor: 3.6.0
+
+  react-text-to-speech@1.1.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+    dependencies:
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
 
   react@19.0.0: {}
 
@@ -9322,6 +9398,8 @@ snapshots:
       hastscript: 6.0.0
       parse-entities: 2.0.0
       prismjs: 1.27.0
+
+  regenerator-runtime@0.13.11: {}
 
   regenerator-runtime@0.14.1: {}
 
@@ -9522,6 +9600,10 @@ snapshots:
   safe-regex@1.1.0:
     dependencies:
       ret: 0.1.15
+
+  say@0.16.0:
+    dependencies:
+      one-time: 0.0.4
 
   scheduler@0.25.0: {}
 
