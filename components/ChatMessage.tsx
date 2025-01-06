@@ -10,6 +10,9 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
 import Image from 'next/image';
+import AISpeech from './Speech';
+import { Button } from './ui/button';
+import { Copy } from 'lucide-react';
 
 interface CodeProps {
     inline?: boolean;
@@ -24,7 +27,7 @@ interface ChatMessageProps {
 
 const handleCopy = (code: string) => {
     navigator.clipboard.writeText(code);
-    toast.success("Code copied to clipboard!");
+    toast.success("Response copied to clipboard!");
 };
 
 
@@ -173,6 +176,15 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ role, content }) => {
                             </Accordion>
                         </>
                     }
+                </div>
+                <div>
+                   {!isUser ? 
+                   <div className='flex items-center gap-1'>
+                    <Button onClick={() => handleCopy(content)} variant={"ghost"} className='p-2'>
+                        <Copy/>
+                    </Button>
+                    <AISpeech text={content}/>
+                   </div> : ""}
                 </div>
             </div>
         </div>
