@@ -6,7 +6,7 @@ import { Mic, Send, XCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useUser } from '@clerk/nextjs';
 import { ProModal } from './ProModal';
-import { Drawer, DrawerTrigger, DrawerContent, DrawerTitle } from './ui/drawer';
+import { Drawer, DrawerTrigger, DrawerContent, DrawerTitle, DrawerClose } from './ui/drawer';
 
 interface ChatInputProps {
   onSend: (message: string) => void;
@@ -170,6 +170,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
                 </div>
                 <div className="flex justify-center items-center space-x-3">
                   {!isListening ? (
+
                     <button
                       onClick={startListening}
                       className="rounded-full bg-green-500  text-white p-2 shadow-md hover:bg-green-600 transition"
@@ -177,19 +178,23 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
                       <Mic />
                     </button>
                   ) : (
-                    <button
-                      onClick={stopListening}
-                      className="rounded-full bg-blue-500 text-white p-2 shadow-md hover:bg-blue-600 transition"
-                    >
-                      <Send />
-                    </button>
+                    <DrawerClose asChild>
+                      <button
+                        onClick={stopListening}
+                        className="rounded-full bg-blue-500 text-white p-2 shadow-md hover:bg-blue-600 transition"
+                      >
+                        <Send />
+                      </button>
+                    </DrawerClose>
                   )}
-                  <button
-                    onClick={clearTranscript}
-                    className="rounded-full bg-gray-500 text-white p-2 shadow-md hover:bg-gray-600 transition"
-                  >
-                    <XCircle />
-                  </button>
+                  <DrawerClose asChild>
+                    <button
+                      onClick={clearTranscript}
+                      className="rounded-full bg-gray-500 text-white p-2 shadow-md hover:bg-gray-600 transition"
+                    >
+                      <XCircle />
+                    </button>
+                  </DrawerClose>
                 </div>
               </div>
             </div>
