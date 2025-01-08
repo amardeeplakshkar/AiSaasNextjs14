@@ -22,9 +22,9 @@ interface PDFMessage {
 }
 
 const App = () => {
-  const [pdfText, setPdfText] = useState<string>(""); 
-  const [pdfName, setPdfName] = useState<string>(""); 
-  const [input, setInput] = useState<string>(""); 
+  const [pdfText, setPdfText] = useState<string>("");
+  const [pdfName, setPdfName] = useState<string>("");
+  const [input, setInput] = useState<string>("");
   const { user } = useUser();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { sendUserMessage, messages } = usePollinationsChat(
@@ -35,7 +35,7 @@ const App = () => {
     }
   );
 
-  
+
   const extractTextFromPDF = async (file: File) => {
     const fileArrayBuffer = await file.arrayBuffer();
     const pdf = await pdfjsLib.getDocument(fileArrayBuffer).promise;
@@ -48,12 +48,12 @@ const App = () => {
         if ('str' in item) {
           return item.str;
         }
-        return ''; 
+        return '';
       }).join(" ");
       text += pageText + "\n";
     }
     setPdfName(file.name);
-    setPdfText(text); 
+    setPdfText(text);
   };
 
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
@@ -91,7 +91,7 @@ const App = () => {
             toast.error("You have exceeded your limit.");
           } else {
             const combinedText = `${pdfText}\n${input}`;
-            sendUserMessage(combinedText); 
+            sendUserMessage(combinedText);
             setInput("");
             handleIncrementLimit();
           }
@@ -231,46 +231,48 @@ const App = () => {
                 </div>
               ))}
           </div>
-          <div className="p-4 border-t flex items-center gap-2">
-            <textarea
-              value={input}
-              onKeyDown={handleKeyPress}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Type your message..."
-              className="flex-1 resize-none rounded-lg border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 max-h-[200px]"
-              rows={1}
-            />
-            <label
-              htmlFor="upload-pdf"
-              className="p-[.7rem] bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors cursor-pointer"
-            >
-              <Paperclip />
-            </label>
-            <input
-              id="upload-pdf"
-              type="file"
-              accept="application/pdf"
-              onChange={handleFileUpload}
-              className="hidden"
-            />
-            <button
-              onClick={handleSend}
-              className="p-[.7rem] bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-            >
-              <Send />
-            </button>
+          <div className="border-t bg-white pt-4">
+            <div className="max-w-3xl mx-auto items-center flex gap-2">
+              <textarea
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyPress}
+                placeholder="Type your message..."
+                className="flex-1 resize-none rounded-lg border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[60px] max-h-[200px]"
+                rows={1}
+              />
+              <label
+                htmlFor="upload-pdf"
+                className="p-[.7rem] bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors cursor-pointer"
+              >
+                <Paperclip />
+              </label>
+              <input
+                id="upload-pdf"
+                type="file"
+                accept="application/pdf"
+                onChange={handleFileUpload}
+                className="hidden"
+              />
+              <button
+                onClick={handleSend}
+                className="p-[.7rem] bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+              >
+                <Send />
+              </button>
+            </div>
+            {pdfName ?
+              <p className="bg-black/10 line-clamp-1 p-1 rounded-md">
+                <span className="font-bold">SelectedPDF:</span> {pdfName}
+              </p>
+              : ""}
           </div>
-          {pdfName ?
-            <p className="bg-black/10 line-clamp-1 p-1 rounded-md">
-              <span className="font-bold">SelectedPDF:</span> {pdfName}
-            </p>
-            : ""}
         </div>
+        <ProModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
       </div>
-      <ProModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)} 
-      />
     </div>
   );
 };

@@ -2,7 +2,7 @@
 'use client'
 
 import React, { useState, KeyboardEvent, useRef } from 'react';
-import { Mic, Send, XCircle } from 'lucide-react';
+import { Mic, Send, XIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useUser } from '@clerk/nextjs';
 import { ProModal } from './ProModal';
@@ -30,16 +30,16 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
       recognitionRef.current.lang = 'en-US';
 
       recognitionRef.current.onresult = (event: any) => {
-        // Get the last result (most recent speech input)
+        
         const results = event.results;
         const lastResultIndex = results.length - 1;
         const lastResult = results[lastResultIndex];
 
-        // Only process if it's a final result
+        
         if (lastResult.isFinal) {
           const finalTranscript = lastResult[0].transcript.trim();
 
-          // Avoid duplicates by comparing with last final transcript
+          
           if (finalTranscript !== lastFinalTranscriptRef.current) {
             lastFinalTranscriptRef.current = finalTranscript;
             setTranscript(finalTranscript);
@@ -51,7 +51,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
         console.error(`Speech recognition error: ${event.error} `);
       };
 
-      // Reset last transcript when starting
+      
       lastFinalTranscriptRef.current = "";
       recognitionRef.current.start();
       setIsListening(true);
@@ -77,7 +77,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
             } else {
               onSend(transcript.trim());
               handleIncrementLimit()
-              // setTranscript("");
+              
             }
           } else {
             toast.error(data.error || "An error occurred while checking the limit.");
@@ -158,7 +158,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
               <Mic />
             </div>
           </DrawerTrigger>
-          <DrawerContent className='rounded-2xl'>
+          <DrawerContent className='rounded-t-2xl'>
             <DrawerTitle>
             </DrawerTitle>
             <div className="flex flex-row gap-5 my-3">
@@ -190,9 +190,9 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
                   <DrawerClose asChild>
                     <button
                       onClick={clearTranscript}
-                      className="rounded-full bg-gray-500 text-white p-2 shadow-md hover:bg-gray-600 transition"
+                      className="rounded-full bg-red-500 text-white p-2 shadow-md hover:bg-red-600 transition"
                     >
-                      <XCircle />
+                      <XIcon />
                     </button>
                   </DrawerClose>
                 </div>
@@ -213,7 +213,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
       </p>
       <ProModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)} // Close the modal
+        onClose={() => setIsModalOpen(false)} 
       />
     </div>
   );

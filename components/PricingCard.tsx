@@ -1,5 +1,6 @@
-import { CheckCircle2 } from 'lucide-react'
+import { CheckCircle2, LoaderIcon } from 'lucide-react'
 import React from 'react'
+import toast from 'react-hot-toast';
 
 const PricingCard = () => {
     const ProList = [
@@ -28,7 +29,7 @@ const PricingCard = () => {
 
     const FreeList = [
         {
-            item: "50 Free Credits"
+            item: "100 Free Credits"
         },
         {
             item: "Basic chat support"
@@ -79,7 +80,9 @@ const PricingCard = () => {
                             <li key={i} className='flex items-center gap-1'><CheckCircle2 className='text-[#8ce3bf]' size={'1rem'} />{item.item}</li>
                         )}
                 </ul>
-                <button className=' text-[#243131] bg-[#8ce3bf] p-2 rounded-full'>Get Started</button>
+                <button onClick={() => toast("🔨 Under Development",{
+                    icon: <LoaderIcon className='animate-spin'/>
+                })} className=' text-[#243131] bg-[#8ce3bf] p-2 rounded-full'>Get Started</button>
             </div>
         </div>
     )
