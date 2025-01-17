@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react';
+import React, { useState } from 'react';
 import { usePollinationsChat } from '@pollinations/react';
 import { ChatMessage } from '@/components/ChatMessage';
 import { ChatInput } from '@/components/ChatInput';
@@ -8,7 +8,11 @@ import 'katex/dist/katex.min.css';
 import SectionCard from '@/components/SectionCard';
 
 function App() {
-  
+    const [currentModel, setCurrentModel] = useState<string>("openai");
+
+  const handleToggleModel = () => {
+    setCurrentModel((prevModel) => (prevModel === "openai" ? "searchgpt" : "openai"));
+  };
   const { sendUserMessage, messages } = usePollinationsChat([
     {
       role: "system",
@@ -28,7 +32,7 @@ Always respond with this Markdown syntax when an image is requested.`
     }
   ], {
     seed: 100,
-    model: 'openai'
+    model: currentModel
   });
 
   return (
@@ -46,8 +50,9 @@ Always respond with this Markdown syntax when an image is requested.`
           ))}
         </div>
       </main>
-
-      <ChatInput onSend={sendUserMessage} />
+      <ChatInput onSend={sendUserMessage}
+        currentModel={currentModel}
+        onToggleModel={handleToggleModel} />
     </div>
   );
 }

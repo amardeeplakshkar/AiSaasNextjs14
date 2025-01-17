@@ -1,8 +1,6 @@
 import {
   Code, ImageIcon, LayoutDashboard, LucideNewspaper, MessageSquare,
-  SearchIcon,
   Settings,
-  File,
   UsersRound
 } from "lucide-react";
 
@@ -42,26 +40,13 @@ export const NAVBAR = [
     color: "green-500",
   },
   {
-    label: "Search GPT",
-    icon:  SearchIcon,
-    path: "/searchgpt",
-    about: "Engage in real-time news and info conversations.",
-    color: "blue-700",
-  }, 
-  {
     label: "AI Companions",
     icon:  UsersRound,
     color: "orange-700",
     about: "Engage in real-time news and info conversations.",
     path: "/companions",
   },
-  {
-    label: "PDF AI",
-    icon: File,
-    path: "/pdfai",
-    about: "Extract and analyze text from PDF documents with AI.",
-    color: "teal-600",
-  },
+
   {
     label: "Settings",
     icon: Settings,
@@ -94,26 +79,13 @@ export const TOOLS = [
     href: "/code",
   },
   {
-    label: "Search GPT",
-    icon:  SearchIcon,
-    color: "text-blue-700",
-    bgColor: "bg-blue-700/10",
-    href: "/searchgpt",
-  },
-  {
     label: "AI Companions",
     icon:  UsersRound,
     color: "text-orange-700",
     bgColor: "bg-orange-700/10",
     href: "/companions",
   },
-  {
-    label: "PDF AI",
-    icon: File,
-    color: "text-teal-700",
-    bgColor: "bg-teal-700/10",
-    href: "/pdfai",
-  },
+
   {
     label: "Coming Soon",
     icon: LucideNewspaper,

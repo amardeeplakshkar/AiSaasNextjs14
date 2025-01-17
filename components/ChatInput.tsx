@@ -1,18 +1,42 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
-
-import React, { useState, KeyboardEvent, useRef } from 'react';
-import { Mic, Send, XIcon } from 'lucide-react';
+import * as pdfjsLib from "pdfjs-dist";
+import "pdfjs-dist/build/pdf.worker.mjs";
+import React, { useState, KeyboardEvent, useRef, ChangeEvent } from 'react';
+import { File, Globe, Mic, Paperclip, Send, X, XIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useUser } from '@clerk/nextjs';
 import { ProModal } from './ProModal';
 import { Drawer, DrawerTrigger, DrawerContent, DrawerTitle, DrawerClose } from './ui/drawer';
+import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
+import { usePathname } from "next/navigation";
 
 interface ChatInputProps {
-  onSend: (message: string) => void;
+    onSend: (message: string) => void;
+    currentModel?: string; // Pass the current model name (e.g., "openai" or "searchgpt")
+    onToggleModel?: () => void; // Function to toggle the model
+  }
+interface FileDisplayProps {
+    fileName: string;
+    onClear: () => void;
 }
 
-export const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
+const FileDisplay = ({ fileName, onClear }: FileDisplayProps) => (
+    <div className="flex items-center gap-2 bg-black/5 dark:bg-white/5 w-fit px-3 py-1 rounded-lg group">
+        <File className="w-4 h-4 dark:text-white" />
+        <span className="text-sm dark:text-white line-clamp-1">{fileName}</span>
+        <button
+            type="button"
+            onClick={onClear}
+            className="ml-1 p-0.5 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
+        >
+            <X className="w-3 h-3 dark:text-white" />
+        </button>
+    </div>
+);
+
+export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onToggleModel, currentModel }) => {
   const [input, setInput] = useState('');
   const { user } = useUser()
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,6 +44,48 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef<any>(null);
   const lastFinalTranscriptRef = useRef<string>("");
+  const [pdfText, setPdfText] = useState<string>("");
+  const [pdfName, setPdfName] = useState<string>("");
+  const pathname = usePathname()
+
+  const extractTextFromPDF = async (file: File) => {
+    const fileArrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument(fileArrayBuffer).promise;
+
+    let text = "";
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      const pageText = content.items.map((item) => {
+        if ('str' in item) {
+          return item.str;
+        }
+        return '';
+      }).join(" ");
+      text += pageText + "\n";
+    }
+    setPdfName(file.name);
+    setPdfText(text);
+  };
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      console.log('File uploaded:', file.name);
+      extractTextFromPDF(file); // Call your file processing function
+    }
+  };
+
+  const handleFileRemove = () => {
+    setPdfText("");
+    setPdfName("");
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''; // Clear the input field
+      console.log('File input reset.');
+    }
+  };
 
   const startListening = () => {
     if ('webkitSpeechRecognition' in window) {
@@ -30,16 +96,16 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
       recognitionRef.current.lang = 'en-US';
 
       recognitionRef.current.onresult = (event: any) => {
-        
+
         const results = event.results;
         const lastResultIndex = results.length - 1;
         const lastResult = results[lastResultIndex];
 
-        
+
         if (lastResult.isFinal) {
           const finalTranscript = lastResult[0].transcript.trim();
 
-          
+
           if (finalTranscript !== lastFinalTranscriptRef.current) {
             lastFinalTranscriptRef.current = finalTranscript;
             setTranscript(finalTranscript);
@@ -51,7 +117,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
         console.error(`Speech recognition error: ${event.error} `);
       };
 
-      
+
       lastFinalTranscriptRef.current = "";
       recognitionRef.current.start();
       setIsListening(true);
@@ -75,9 +141,9 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
               setIsModalOpen(true);
               toast.error("You have exceeded your limit.");
             } else {
-              onSend(transcript.trim());
+            const combinedText = `${pdfText}\n${transcript}`;
+              onSend(combinedText.trim());
               handleIncrementLimit()
-              
             }
           } else {
             toast.error(data.error || "An error occurred while checking the limit.");
@@ -121,9 +187,10 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
             setIsModalOpen(true);
             toast.error("You have exceeded your limit.");
           } else {
-            onSend(input.trim());
-            setInput('');
-            handleIncrementLimit()
+            const combinedText = `${pdfText}\n${input}`;
+            onSend(combinedText);
+            setInput("");
+            handleIncrementLimit();
           }
         } else {
           toast.error(data.error || "An error occurred while checking the limit.");
@@ -142,20 +209,98 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
   };
 
   return (
-    <div className="border-t bg-white p-4">
-      <div className="max-w-3xl mx-auto items-center flex gap-2">
+    <div className="border-t p-4">
+      <div className="w-full bg-primary/5 max-w-3xl mx-auto p-3 rounded-lg items-center flex flex-col gap-2">
+      {pdfName && (
+        <div className="self-start">
+                    <FileDisplay fileName={pdfName} onClear={handleFileRemove} />
+        </div>
+                )}
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyPress}
           placeholder="Type your message..."
-          className="flex-1 resize-none rounded-lg border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[60px] max-h-[200px]"
-          rows={1}
+          className="w-full bg-transparent resize-none rounded-lg border-gray-300 p-3 outline-none min-h-[60px] max-h-[200px]"
+          rows={2}
         />
-        <Drawer>
+      <div className={`flex justify-between w-full ${
+         pathname === "/image" && "flex-col"
+      }`}>
+    {
+        pathname !== "/image" &&
+        <div className='flex justify-center items-center gap-2'>
+
+        <label
+             htmlFor="upload-pdf"
+             className="cursor-pointer rounded-lg p-2 bg-black/5 dark:bg-white/5"
+           >
+             <Paperclip className="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white transition-colors" />
+           </label>
+           <input
+             id="upload-pdf"
+             type="file"
+             accept="application/pdf"
+             onChange={handleFileUpload}
+             className="hidden"
+           />
+          <button onClick={onToggleModel}>
+             <span className={`cursor-pointer rounded-full p-2 border bg-black/5 dark:bg-white/5 transition-all flex items-center gap-2 ${currentModel === "searchgpt" && "border bg-sky-500/15 border-sky-400 text-sky-500"}`}>
+             <div className="flex items-center justify-center flex-shrink-0">
+               <motion.div
+                 animate={{
+                   rotate: currentModel === "searchgpt" ? 180 : 0,
+                   scale: currentModel === "searchgpt" ? 1.1 : 1,
+                 }}
+                 whileHover={{
+                   rotate: currentModel === "searchgpt" ? 180 : 15,
+                   scale: 1.1,
+                   transition: {
+                     type: "spring",
+                     stiffness: 300,
+                     damping: 10,
+                   },
+                 }}
+                 transition={{
+                   type: "spring",
+                   stiffness: 260,
+                   damping: 25,
+                 }}
+               >
+                 <Globe
+                   className={cn(
+                     currentModel === "searchgpt"
+                       ? "text-sky-500"
+                       : "text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white transition-colors"
+                   )}
+                 />
+               </motion.div>
+             </div>
+             <AnimatePresence>
+               {currentModel === "searchgpt" && (
+                 <motion.span
+                   initial={{ width: 0, opacity: 0 }}
+                   animate={{
+                     width: "auto",
+                     opacity: 1,
+                   }}
+                   exit={{ width: 0, opacity: 0 }}
+                   transition={{ duration: 0.2 }}
+                   className="text-sm overflow-hidden whitespace-nowrap text-sky-500 flex-shrink-0"
+                 >
+                   Search
+                 </motion.span>
+               )}
+             </AnimatePresence>
+             </span>
+          </button>
+     </div>
+    }
+       <div className='flex justify-end items-center gap-2'>
+       <Drawer>
           <DrawerTrigger>
-            <div className=' p-3 self-center bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'>
-              <Mic />
+            <div className='cursor-pointer rounded-lg p-2 bg-black/5 dark:bg-white/5'>
+              <Mic className="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white transition-colors"/>
             </div>
           </DrawerTrigger>
           <DrawerContent className='rounded-t-2xl'>
@@ -170,7 +315,6 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
                 </div>
                 <div className="flex justify-center items-center space-x-3">
                   {!isListening ? (
-
                     <button
                       onClick={startListening}
                       className="rounded-full bg-green-500  text-white p-2 shadow-md hover:bg-green-600 transition"
@@ -203,17 +347,19 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
         <button
           onClick={handleSend}
           disabled={!input.trim()}
-          className="p-3 self-center bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="p-2 self-center bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Send />
         </button>
+       </div>
+      </div>
       </div>
       <p className="text-center text-sm text-gray-500 mt-2">
         Press Enter to send, Shift + Enter for new line
       </p>
       <ProModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)} 
+        onClose={() => setIsModalOpen(false)}
       />
     </div>
   );

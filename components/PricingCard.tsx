@@ -1,3 +1,4 @@
+'use client'
 import { CheckCircle2, LoaderIcon } from 'lucide-react'
 import React from 'react'
 import toast from 'react-hot-toast';

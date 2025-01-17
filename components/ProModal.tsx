@@ -3,7 +3,7 @@
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Zap } from "lucide-react";
+import { Infinity, Zap } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
@@ -30,16 +30,16 @@ export const ProModal = ({
       if (isOpen) {
         setLoading(true);
         try {
-          const response = await fetch(`/api/user?userId=${userId}`); 
+          const response = await fetch(`/api/user?userId=${userId}`);
           const data = await response.json();
           if (response.ok) {
-            setIsLimitReached(data.hasExceededLimit); 
+            setIsLimitReached(data.hasExceededLimit);
           } else {
-            setIsLimitReached(false); 
+            setIsLimitReached(false);
           }
         } catch (error) {
           console.error("Error fetching API limit", error);
-          setIsLimitReached(false); 
+          setIsLimitReached(false);
         } finally {
           setLoading(false);
         }
@@ -62,22 +62,24 @@ export const ProModal = ({
             </span>
           </DialogTitle>
           <DialogDescription className="text-center pt-2 space-y-2 text-zinc-900 font-medium">
-            {loading ? (
+          <span className="my-2">
+          {loading ? (
               <span>Loading...</span>
             ) : isLimitReached ? (
               <span className="text-red-500">
                 You have reached your free API limit. Upgrade to continue generating content.
               </span>
             ) : (
-              <span>
+              <span className="text-primary">
                 Upgrade to Pro for unlimited generations.
               </span>
             )}
-            <span>
+          </span>
+            <span className="my-2">
               {
                 TOOLS.map((e, i) =>
                   <span key={i} className={cn(
-                    "text-sm group flex p-3 w-full justify-between font-medium transition  rounded-lg",
+                    "text-sm group flex my-2 p-3 w-full justify-between font-medium transition  rounded-lg",
                     "text-primary bg-white/10"
                   )}
                   >
@@ -85,7 +87,9 @@ export const ProModal = ({
                       <e.icon className={cn("h-5 mr-3 w-5", `${e.color}`)} />
                       {e.label}
                     </span>
-                    <Badge variant={"premium"}>Unlimited</Badge>
+                    <Badge variant={"premium"}>
+                        <Infinity/>
+                    </Badge>
                   </span>
                 )}
             </span>
@@ -98,8 +102,8 @@ export const ProModal = ({
             className="w-full"
             onClick={() => toast('Feature will be introduced in the next update!', {
               icon: '👏',
-            })} 
-            disabled={loading} 
+            })}
+            disabled={loading}
           >
             Upgrade
             <Zap className="w-4 h-4 ml-2 fill-white" />

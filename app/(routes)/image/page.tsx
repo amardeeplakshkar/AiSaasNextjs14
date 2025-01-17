@@ -16,7 +16,7 @@ const ImageComponent = () => {
         width: ratio.width,
         height: ratio.height,
         seed: 42,
-        model: "flux",
+        model: "midjourney",
         nologo: true,
         enhance: true,
         safe:true,
@@ -80,7 +80,7 @@ const ImageComponent = () => {
                                     className="rounded-md"
                                     style={{
                                         width: `${ratio.width / 3.5}px`,
-                                        height: `${ratio.height / 3.5}px`, 
+                                        height: `${ratio.height / 3.5}px`,
                                         backgroundColor: "rgba(0, 0, 0, 0.1)",
                                     }}
                                 >
@@ -126,7 +126,7 @@ const ImageComponent = () => {
                     </div>
                 </div>
             </main>
-            <ChatInput onSend={setSubmittedPrompt} />
+             <ChatInput onSend={setSubmittedPrompt} />
         </div>
     );
 };

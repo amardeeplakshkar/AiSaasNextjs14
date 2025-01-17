@@ -4,8 +4,8 @@ import { FaBars } from 'react-icons/fa'
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetClose } from './ui/sheet'
 import { Separator } from './ui/separator'
 import { usePathname, useRouter } from 'next/navigation'
-import { BotIcon, Settings, Wrench } from 'lucide-react'
-import { SignedOut, SignInButton, SignedIn, UserButton, useUser } from '@clerk/nextjs'
+import { BotIcon, Moon, Settings, Sun, Wrench } from 'lucide-react'
+import { SignedOut, SignInButton, SignedIn, useUser } from '@clerk/nextjs'
 import { UserAvatar } from './Avatar'
 import { Button } from './ui/button'
 import { NAVBAR } from '@/constants'
@@ -13,6 +13,8 @@ import { FreeCounter } from './FreeCounter'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
+import { useTheme } from 'next-themes'
 
 const Navbar = () => {
     const pathName = usePathname();
@@ -20,10 +22,11 @@ const Navbar = () => {
     const router = useRouter()
     const { user } = useUser()
     const FirstItem = NAVBAR[0]
+    const { setTheme } = useTheme()
     const LastItem = NAVBAR[NAVBAR.length - 1]
     return (
         <>
-            <nav className='bg-[#e7f3f2] shadow-lg rounded-full m-1 mb-0 flex justify-between items-center p-1'>
+            <nav className='bg-[#e7f3f2]/10 shadow-lg rounded-full m-1 mb-0 flex justify-between items-center p-1'>
                 <div className='bg-green-500/25 rounded-full p-2'><BotIcon /></div>
                 <p className='text-sm font-semibold'>
                     {currentLabel}
@@ -35,7 +38,26 @@ const Navbar = () => {
                         </div>
                     </SignedOut>
                     <SignedIn>
-                        <UserButton />
+                    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button className='ring-0 focus:ring-0' variant="link" size="icon">
+          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <span className="sr-only">Toggle theme</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => setTheme("light")}>
+          Light
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("dark")}>
+          Dark
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("system")}>
+          System
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
                     </SignedIn>
                     <Sheet>
                         <SheetTrigger asChild>
@@ -61,7 +83,7 @@ const Navbar = () => {
                                         </div>
                                     </Link>
                                 </SheetClose>
-                                <Accordion type='single' collapsible className='border-y my-2'>
+                                <Accordion type='single' collapsible className='border-y border-white my-2'>
                                     <AccordionItem value='1' className='m-0 p-0'>
                                         <AccordionTrigger className='px-2'>
                                             <p className='flex  justify-start items-center'>

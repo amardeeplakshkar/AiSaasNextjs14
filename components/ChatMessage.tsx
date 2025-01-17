@@ -135,15 +135,15 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ role, content }) => {
                 <div className={`flex items-center justify-start ${isUser ? ' self-end' : ''
                     }`}>
                     <div className=''>
-                        {isUser ? <UserAvatar /> : 
+                        {isUser ? <UserAvatar /> :
                         <>
                             <BotAvatar />
                         </>}
                     </div>
                 </div>
                 <div className={`prose prose-sm max-w-none p-4 rounded-lg ${isUser
-                    ? 'bg-blue-500 text-white prose-invert'
-                    : 'bg-gray-100 text-gray-900'
+                    ? 'bg-blue-500/90 text-white prose-invert'
+                    : 'bg-primary/5'
                     }`}>
                     {!isUser ? <ReactMarkdown
                         className="text-sm flex flex-col gap-2"
@@ -178,7 +178,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ role, content }) => {
                     }
                 </div>
                 <div>
-                   {!isUser ? 
+                   {!isUser ?
                    <div className='flex items-center gap-1'>
                     <Button onClick={() => handleCopy(content)} variant={"ghost"} className='p-2'>
                         <Copy/>

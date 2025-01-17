@@ -4,6 +4,7 @@ import { Toaster } from "react-hot-toast";
 import Navbar from "@/components/Navbar";
 import { ClerkLoaded, ClerkLoading, ClerkProvider } from '@clerk/nextjs'
 import Loader from "@/components/Loader";
+import Provider from "./provider";
 
 export const metadata: Metadata = {
   title: "Edith AI",
@@ -24,7 +25,7 @@ export default function RootLayout({
         baseTheme: [],
       }}
     >
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <script
           type="text/javascript"
           async
@@ -33,6 +34,7 @@ export default function RootLayout({
         <body
           className={`antialiased relative mt-[3rem]`}
         >
+            <Provider>
           <ClerkLoading>
             <Loader />
           </ClerkLoading>
@@ -46,7 +48,8 @@ export default function RootLayout({
             containerClassName="text-xs"
             position="top-center"
             reverseOrder={false}
-          />
+            />
+            </Provider>
         </body>
       </html>
     </ClerkProvider>
