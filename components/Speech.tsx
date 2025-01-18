@@ -1,6 +1,6 @@
 'use client';
 
-import { Volume2 } from "lucide-react";
+import { Volume2, StopCircle } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 
@@ -11,6 +11,7 @@ interface AISpeechProps {
 const AISpeech: React.FC<AISpeechProps> = ({ text }) => {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [selectedVoice, setSelectedVoice] = useState<string>("");
+  const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
 
   useEffect(() => {
     const loadVoices = () => {
@@ -47,14 +48,31 @@ const AISpeech: React.FC<AISpeechProps> = ({ text }) => {
         }
       }
 
+      utterance.onstart = () => {
+        setIsSpeaking(true);
+      };
+
+      utterance.onend = () => {
+        setIsSpeaking(false);
+      };
+
       window.speechSynthesis.speak(utterance);
     }
   };
 
+  const handleStop = () => {
+    window.speechSynthesis.cancel();
+    setIsSpeaking(false);
+  };
+
   return (
-      <Button variant={"ghost"} className="p-2" onClick={handleSpeak}>
-        <Volume2 />
-      </Button>
+    <Button
+      variant="ghost"
+      className="p-2"
+      onClick={isSpeaking ? handleStop : handleSpeak}
+    >
+      {isSpeaking ? <StopCircle /> : <Volume2 />}
+    </Button>
   );
 };
 
