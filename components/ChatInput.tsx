@@ -3,7 +3,7 @@
 import * as pdfjsLib from "pdfjs-dist";
 import "pdfjs-dist/build/pdf.worker.mjs";
 import React, { useState, KeyboardEvent, useRef, ChangeEvent } from 'react';
-import { File, Globe, Mic, Paperclip, Send, X, XIcon } from 'lucide-react';
+import { File, Globe, Loader2, Mic, Paperclip, Send, Sparkles, X, XIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useUser } from '@clerk/nextjs';
 import { ProModal } from './ProModal';
@@ -11,6 +11,7 @@ import { Drawer, DrawerTrigger, DrawerContent, DrawerTitle, DrawerClose } from '
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
+import TooltipBox from "./Tooltip";
 
 interface ChatInputProps {
     onSend: (message: string) => void;
@@ -208,6 +209,24 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onToggleModel, cur
     }
   };
 
+  const handlePropmtEnchance =async() =>{
+    if (input.trim()) {
+        toast("loading...",{
+            icon: <Loader2 className="animate-spin h-5 w-5"/>
+        })
+    try {
+        const response = await fetch(`https://text.pollinations.ai/${encodeURIComponent(input)}?system=enhance this propmt and make sure no other commentry needed just return enhanced prompt thats it`);
+        const data = await response.text();
+        setInput(data.trim());
+        toast.success("🎉Prompt Enhanced!")
+      } catch (error) {
+        console.error("Error fetching AI response:", error);
+        toast.error("Error generating response");
+      }
+  }else{
+    toast.error("Input Prompt For Enhance It")
+  }
+  }
   return (
     <div className="border-t p-4">
       <div className="w-full bg-primary/5 max-w-3xl mx-auto p-3 rounded-lg items-center flex flex-col gap-2">
@@ -230,12 +249,11 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onToggleModel, cur
     {
         pathname !== "/image" &&
         <div className='flex justify-center items-center gap-2'>
-
         <label
              htmlFor="upload-pdf"
-             className="cursor-pointer rounded-lg p-2 bg-black/5 dark:bg-white/5"
-           >
-             <Paperclip className="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white transition-colors" />
+             className="group cursor-pointer rounded-lg p-2 bg-black/5 dark:bg-white/5"
+             >
+             <Paperclip className="text-black/40 dark:text-white/40 group-hover:text-black dark:group-hover:text-white transition-colors" />
            </label>
            <input
              id="upload-pdf"
@@ -243,42 +261,48 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onToggleModel, cur
              accept="application/pdf"
              onChange={handleFileUpload}
              className="hidden"
-           />
+             />
+           <TooltipBox content="Enhance Prompt">
+            <button onClick={handlePropmtEnchance} className='group cursor-pointer rounded-lg p-2 bg-black/5 dark:bg-white/5'>
+              <Sparkles className="text-black/40 dark:text-white/40 group-hover:text-black dark:group-hover:text-white transition-colors"/>
+            </button>
+           </TooltipBox>
+           <TooltipBox content="Switch to Search Model">
           <button onClick={onToggleModel}>
              <span className={`cursor-pointer rounded-full p-2 border bg-black/5 dark:bg-white/5 transition-all flex items-center gap-2 ${currentModel === "searchgpt" && "border bg-sky-500/15 border-sky-400 text-sky-500"}`}>
              <div className="flex items-center justify-center flex-shrink-0">
                <motion.div
                  animate={{
-                   rotate: currentModel === "searchgpt" ? 180 : 0,
+                     rotate: currentModel === "searchgpt" ? 180 : 0,
                    scale: currentModel === "searchgpt" ? 1.1 : 1,
-                 }}
+                }}
                  whileHover={{
-                   rotate: currentModel === "searchgpt" ? 180 : 15,
+                     rotate: currentModel === "searchgpt" ? 180 : 15,
                    scale: 1.1,
                    transition: {
                      type: "spring",
                      stiffness: 300,
                      damping: 10,
                    },
-                 }}
-                 transition={{
-                   type: "spring",
-                   stiffness: 260,
+                }}
+                transition={{
+                    type: "spring",
+                    stiffness: 260,
                    damping: 25,
                  }}
                >
                  <Globe
                    className={cn(
-                     currentModel === "searchgpt"
+                       currentModel === "searchgpt"
                        ? "text-sky-500"
-                       : "text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white transition-colors"
-                   )}
-                 />
+                       : "text-black/40 dark:text-white/40 group-hover:text-black dark:group-hover:text-white transition-colors"
+                    )}
+                    />
                </motion.div>
              </div>
              <AnimatePresence>
                {currentModel === "searchgpt" && (
-                 <motion.span
+                   <motion.span
                    initial={{ width: 0, opacity: 0 }}
                    animate={{
                      width: "auto",
@@ -294,14 +318,17 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onToggleModel, cur
              </AnimatePresence>
              </span>
           </button>
+                   </TooltipBox>
      </div>
     }
        <div className='flex justify-end items-center gap-2'>
        <Drawer>
-          <DrawerTrigger>
-            <div className='cursor-pointer rounded-lg p-2 bg-black/5 dark:bg-white/5'>
-              <Mic className="text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white transition-colors"/>
+          <DrawerTrigger className="">
+            <TooltipBox content="Voice Input">
+            <div className='group -mb-2 cursor-pointer rounded-lg p-2 bg-black/5 dark:bg-white/5'>
+              <Mic className="text-black/40 dark:text-white/40 group-hover:text-black dark:group-hover:text-white transition-colors"/>
             </div>
+            </TooltipBox>
           </DrawerTrigger>
           <DrawerContent className='rounded-t-2xl'>
             <DrawerTitle>
@@ -348,7 +375,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onToggleModel, cur
           onClick={handleSend}
           disabled={!input.trim()}
           className="p-2 self-center bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        >
+          >
           <Send />
         </button>
        </div>

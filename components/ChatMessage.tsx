@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
@@ -13,6 +15,7 @@ import Image from 'next/image';
 import AISpeech from './Speech';
 import { Button } from './ui/button';
 import { Copy } from 'lucide-react';
+import 'katex/dist/katex.css';
 
 interface CodeProps {
     inline?: boolean;
@@ -70,7 +73,7 @@ const renderers = {
         </div>
     ),
     th: ({ children }: { children: React.ReactNode }) => (
-        <th className="border border-gray-300 bg-gray-200 p-2 text-left">
+        <th className="border border-gray-300 bg-secondary-foreground/25 p-2 text-left">
             {children}
         </th>
     ),
@@ -81,25 +84,6 @@ const renderers = {
     ),
     td: ({ children }: { children: React.ReactNode }) => (
         <td className="border border-gray-300 p-2">{children}</td>
-    ),
-    h1: ({ children }: { children: React.ReactNode }) => (
-        <h1 className="text-2xl font-bold my-2">{children}</h1>
-    ),
-    h2: ({ children }: { children: React.ReactNode }) => (
-        <h2 className="text-xl font-bold my-2">{children}</h2>
-    ),
-    h3: ({ children }: { children: React.ReactNode }) => (
-        <h3 className="text-lg font-bold my-2">{children}</h3>
-    ),
-    h4: ({ children }: { children: React.ReactNode }) => (
-        <h4 className="text-md font-bold my-2">{children}</h4>
-    ),
-    h5: ({ children }: { children: React.ReactNode }) => (
-        <h5 className="text-sm font-bold my-2">{children}</h5>
-    ),
-    span: ({ children }: { children: React.ReactNode }) => <span className="m-0">{children}</span>,
-    h6: ({ children }: { children: React.ReactNode }) => (
-        <h6 className="text-xs font-bold my-2">{children}</h6>
     ),
     ul: ({ children }: { children: React.ReactNode }) => (
         <ul className="list-disc pl-5 space-y-2">{children}</ul>
@@ -146,11 +130,14 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ role, content }) => {
                     : 'bg-primary/5'
                     }`}>
                     {!isUser ? <ReactMarkdown
-                        className="text-sm flex flex-col gap-2"
+                        className=""
                         remarkPlugins={[remarkMath, remarkGfm, remarkToc]}
                         rehypePlugins={[rehypeKatex]}
                         components={{
                             ...renderers,
+                            p: ({ children }: { children: React.ReactNode }) => (
+                                <p className="my-2">{children}</p>
+                            ),
                         }}
                     >
                         {content}

@@ -28,7 +28,10 @@ Replace UserPrompt with the exact description or prompt provided by the user. En
 
 ![Image](https://image.pollinations.ai/prompt/UserPrompt?nologo=true,?enhance=true)
 
-Always respond with this Markdown syntax when an image is requested.`
+Always respond with this Markdown syntax when an image is requested.
+
+ When writing mathematical formulas, use LaTeX syntax with single dollar signs for inline math and double dollar signs for display math and write mathematical formulas without list and ul.
+`
     }
   ], {
     seed: 100,

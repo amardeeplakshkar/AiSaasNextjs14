@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import { ClerkLoaded, ClerkLoading, ClerkProvider } from '@clerk/nextjs'
 import Loader from "@/components/Loader";
 import Provider from "./provider";
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "Edith AI",
@@ -26,12 +27,27 @@ export default function RootLayout({
       }}
     >
       <html lang="en" suppressHydrationWarning>
+      <Script
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js"
+  integrity="sha384-Rma6DA2IPUwhNxmrB/7S3Tno0YY7sFu9WSYMCuulLhIqYSGZ2gKCJWIqhBWqMQfh"
+  crossOrigin="anonymous"
+  strategy="lazyOnload" // Load the script lazily after the page is rendered
+/>
         <script
           type="text/javascript"
           async
           src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
         ></script>
+            <head>
+          <link
+              rel="stylesheet"
+              href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css"
+              integrity="sha384-zh0CIslj+VczCZtlzBcjt5ppRcsAmDnRem7ESsYwWwg3m/OaJ2l4x7YBZl9Kxxib"
+              crossOrigin="anonymous"
+            />
+            </head>
         <body
+        suppressHydrationWarning
           className={`antialiased relative mt-[3rem]`}
         >
             <Provider>

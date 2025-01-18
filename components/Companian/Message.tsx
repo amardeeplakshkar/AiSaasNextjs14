@@ -1,7 +1,9 @@
 "use client";
 
 import ReactMarkdown from "react-markdown";
-
+import rehypeKatex from "rehype-katex";
+import remarkMath from "remark-math";
+import 'katex/dist/katex.css';
 interface ChatMessageProps {
   message: {
     role: string;
@@ -24,8 +26,18 @@ export function ChatMessage({ message }: ChatMessageProps) {
         }`}
       >
         <ReactMarkdown
+        remarkPlugins={[remarkMath]}
+        rehypePlugins={[rehypeKatex]}
          className="prose dark:prose-invert text-sm flex justify-center items-center flex-col gap-2"
          components={{
+            math: ({ value }) => (
+                <div className="my-4 flex justify-center">
+                  <span>{value}</span>
+                </div>
+              ),
+              inlineMath: ({ value }) => (
+                <span className="mx-1">{value}</span>
+              ),
           p: ({ children }) => <p className="">{children}</p>,
           table: ({ children }: { children: React.ReactNode }) => (
             <div className="overflow-x-auto rounded-md  border-gray-300">

@@ -1,10 +1,7 @@
+export {};
+
 declare global {
   interface Window {
-    MathJax: {
-      typeset: () => void;
-    };
+    renderMathInElement?: (element: HTMLElement, options?: Record<string, unknown>) => void;
   }
 }
-declare module 'mathjax';
-
-export { };
