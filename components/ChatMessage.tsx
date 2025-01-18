@@ -78,7 +78,7 @@ const renderers = {
         </th>
     ),
     a: ({ href, children }: { href: string; children: React.ReactNode }) => (
-        <a href={href} className="text-blue-700 hover:underline" target="" rel="noopener noreferrer">
+        <a href={href} className="text-blue-700 hover:underline" target="_blank" rel="noopener noreferrer">
             {children}
         </a>
     ),
