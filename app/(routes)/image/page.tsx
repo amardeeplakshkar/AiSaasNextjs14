@@ -16,7 +16,7 @@ const ImageComponent = () => {
         width: ratio.width,
         height: ratio.height,
         seed: 42,
-        model: "midjourney",
+        model: "flux",
         nologo: true,
         enhance: true,
         safe:true,
