@@ -106,7 +106,7 @@ const renderers = {
         <em className="italic">{children}</em>
     ),
     img: ({ children, src }: { src:string,children: React.ReactNode }) => (
-        <Image alt='' width={300} height={300} src={`${src},?safe=true`} className="rounded-md">{children}</Image>
+        <Image alt='' width={300} height={300} src={`${src}`} className="rounded-md">{children}</Image>
     ),
 };
 
@@ -138,6 +138,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ role, content }) => {
                             p: ({ children }: { children: React.ReactNode }) => (
                                 <p className="my-2">{children}</p>
                             ),
+
                         }}
                     >
                         {content}

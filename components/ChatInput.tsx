@@ -215,7 +215,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onToggleModel, cur
             icon: <Loader2 className="animate-spin h-5 w-5"/>
         })
     try {
-        const response = await fetch(`https://text.pollinations.ai/${encodeURIComponent(input)}?system=enhance this propmt and make sure no other commentry needed just return enhanced prompt thats it`);
+        const response = await fetch(`https://text.pollinations.ai/${encodeURIComponent(input)}?system=enhance this propmt and make sure no other commentry needed just return enhanced prompt thats it and also dont respond to user query your work is just enhance input propmt thats it dont need anything extra.`);
         const data = await response.text();
         setInput(data.trim());
         toast.success("🎉Prompt Enhanced!")

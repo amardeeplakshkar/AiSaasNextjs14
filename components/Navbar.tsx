@@ -26,7 +26,7 @@ const Navbar = () => {
     const LastItem = NAVBAR[NAVBAR.length - 1]
     return (
         <>
-            <nav className='bg-[#e7f3f2]/10 shadow-lg rounded-full m-1 mb-0 flex justify-between items-center p-1'>
+            <nav className='bg-[#e7f3f2]/10 backdrop-blur-sm shadow-lg rounded-full m-1 mb-0 flex justify-between items-center p-1'>
                 <div className='bg-green-500/25 rounded-full p-2'><BotIcon /></div>
                 <p className='text-sm font-semibold'>
                     {currentLabel}
