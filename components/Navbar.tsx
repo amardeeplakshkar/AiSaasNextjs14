@@ -38,26 +38,26 @@ const Navbar = () => {
                         </div>
                     </SignedOut>
                     <SignedIn>
-                    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button className='ring-0 focus:ring-0' variant="link" size="icon">
-          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          <span className="sr-only">Toggle theme</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
-          System
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button className='ring-0 focus:ring-0' variant="link" size="icon">
+                                    <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                                    <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                                    <span className="sr-only">Toggle theme</span>
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuItem onClick={() => setTheme("light")}>
+                                    Light
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => setTheme("dark")}>
+                                    Dark
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => setTheme("system")}>
+                                    System
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </SignedIn>
                     <Sheet>
                         <SheetTrigger asChild>
@@ -65,7 +65,7 @@ const Navbar = () => {
                         </SheetTrigger>
                         <SheetContent side={"left"} className='text-white flex flex-col bg-emerald-900/80'>
                             <SheetHeader>
-                                <SheetTitle className='text-white py-2 flex justify-center items-center gap-2'><BotIcon />EDITH <span className='text-emerald-900  bg-white px-1 rounded-md'>AI</span></SheetTitle>
+                                <SheetTitle className='text-white py-2 flex justify-center items-center gap-2'><BotIcon />Deep<span className='text-emerald-900  bg-white px-1 rounded-md'>AI</span></SheetTitle>
                             </SheetHeader>
                             <Separator />
                             <section className=' flex flex-1 flex-col gap-2'>
@@ -87,7 +87,7 @@ const Navbar = () => {
                                     <AccordionItem value='1' className='m-0 p-0'>
                                         <AccordionTrigger className='px-2'>
                                             <p className='flex  justify-start items-center'>
-                                            <Wrench className='mr-3 text-yellow-500' />
+                                                <Wrench className='mr-3 text-yellow-500' />
                                                 All Tools
                                             </p>
                                         </AccordionTrigger>

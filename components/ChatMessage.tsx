@@ -65,6 +65,24 @@ const code = ({ inline, className, children }: CodeProps) => {
 
 const renderers = {
     code,
+    h1: ({ children }: { children: React.ReactNode }) => (
+        <h1 className="text-3xl font-bold my-4">{children}</h1>
+    ),
+    h2: ({ children }: { children: React.ReactNode }) => (
+        <h2 className="text-2xl font-semibold my-4">{children}</h2>
+    ),
+    h3: ({ children }: { children: React.ReactNode }) => (
+        <h3 className="text-xl font-medium my-4">{children}</h3>
+    ),
+    h4: ({ children }: { children: React.ReactNode }) => (
+        <h4 className="text-lg font-medium my-3">{children}</h4>
+    ),
+    h5: ({ children }: { children: React.ReactNode }) => (
+        <h5 className="text-base font-medium my-3">{children}</h5>
+    ),
+    h6: ({ children }: { children: React.ReactNode }) => (
+        <h6 className="text-sm font-medium my-2">{children}</h6>
+    ),
     table: ({ children }: { children: React.ReactNode }) => (
         <div className="overflow-x-auto rounded-md  border-gray-300">
             <table className="table-auto w-full rounded-md ">

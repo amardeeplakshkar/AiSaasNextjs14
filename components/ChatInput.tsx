@@ -3,7 +3,7 @@
 import * as pdfjsLib from "pdfjs-dist";
 import "pdfjs-dist/build/pdf.worker.mjs";
 import React, { useState, KeyboardEvent, useRef, ChangeEvent } from 'react';
-import { File, Globe, Loader2, Mic, Paperclip, Send, Sparkles, X, XIcon } from 'lucide-react';
+import { File, Globe, Link, Loader2, Mic, Paperclip, Send, Sparkles, X, XIcon, YoutubeIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useUser } from '@clerk/nextjs';
 import { ProModal } from './ProModal';
@@ -12,29 +12,43 @@ import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
 import TooltipBox from "./Tooltip";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+
+interface YouTubeData {
+  metadata: {
+    title: string;
+    description: string;
+  };
+  pageContent: string;
+}
 
 interface ChatInputProps {
-    onSend: (message: string) => void;
-    currentModel?: string; // Pass the current model name (e.g., "openai" or "searchgpt")
-    onToggleModel?: () => void; // Function to toggle the model
-  }
+  onSend: (message: string) => void;
+  currentModel?: string; // Pass the current model name (e.g., "openai" or "searchgpt")
+  onToggleModel?: () => void; // Function to toggle the model
+}
 interface FileDisplayProps {
-    fileName: string;
-    onClear: () => void;
+  fileName: string;
+  onClear: () => void;
 }
 
 const FileDisplay = ({ fileName, onClear }: FileDisplayProps) => (
-    <div className="flex items-center gap-2 bg-black/5 dark:bg-white/5 w-fit px-3 py-1 rounded-lg group">
+  <div className="flex items-center gap-2 bg-black/5 dark:bg-white/5 w-fit px-3 py-1 rounded-lg group">
+    {
+      fileName.endsWith('.pdf') ?
         <File className="w-4 h-4 dark:text-white" />
-        <span className="text-sm dark:text-white line-clamp-1">{fileName}</span>
-        <button
-            type="button"
-            onClick={onClear}
-            className="ml-1 p-0.5 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
-        >
-            <X className="w-3 h-3 dark:text-white" />
-        </button>
-    </div>
+        : <YoutubeIcon className="" />
+    }
+    <span className="text-sm dark:text-white line-clamp-1">{fileName}</span>
+    <button
+      type="button"
+      onClick={onClear}
+      className="ml-1 p-0.5 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
+    >
+      <X className="w-3 h-3 dark:text-white" />
+    </button>
+  </div>
 );
 
 export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onToggleModel, currentModel }) => {
@@ -65,6 +79,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onToggleModel, cur
       }).join(" ");
       text += pageText + "\n";
     }
+    setYtData(null);
     setPdfName(file.name);
     setPdfText(text);
   };
@@ -75,13 +90,14 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onToggleModel, cur
     const file = event.target.files?.[0];
     if (file) {
       console.log('File uploaded:', file.name);
-      extractTextFromPDF(file); // Call your file processing function
+      extractTextFromPDF(file);
     }
   };
 
   const handleFileRemove = () => {
     setPdfText("");
     setPdfName("");
+    setYtData(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = ''; // Clear the input field
       console.log('File input reset.');
@@ -142,7 +158,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onToggleModel, cur
               setIsModalOpen(true);
               toast.error("You have exceeded your limit.");
             } else {
-            const combinedText = `${pdfText}\n${transcript}`;
+              const combinedText = `${pdfText}\n${transcript}`;
               onSend(combinedText.trim());
               handleIncrementLimit()
             }
@@ -188,7 +204,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onToggleModel, cur
             setIsModalOpen(true);
             toast.error("You have exceeded your limit.");
           } else {
-            const combinedText = `${pdfText}\n${input}`;
+            const combinedText = `${input} \n ${pdfText} \n ${ytData ? `Youtube Video Content: ${ytData?.pageContent}` : ""}`;
             onSend(combinedText);
             setInput("");
             handleIncrementLimit();
@@ -209,12 +225,12 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onToggleModel, cur
     }
   };
 
-  const handlePropmtEnchance =async() =>{
+  const handlePropmtEnchance = async () => {
     if (input.trim()) {
-        toast("loading...",{
-            icon: <Loader2 className="animate-spin h-5 w-5"/>
-        })
-    try {
+      toast("loading...", {
+        icon: <Loader2 className="animate-spin h-5 w-5" />
+      })
+      try {
         const response = await fetch(`https://text.pollinations.ai/${encodeURIComponent(input)}?system=enhance this propmt and make sure no other commentry needed just return enhanced prompt thats it and also dont respond to user query your work is just enhance input propmt thats it dont need anything extra.`);
         const data = await response.text();
         setInput(data.trim());
@@ -223,18 +239,67 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onToggleModel, cur
         console.error("Error fetching AI response:", error);
         toast.error("Error generating response");
       }
-  }else{
-    toast.error("Input Prompt For Enhance It")
+    } else {
+      toast.error("Input Prompt For Enhance It")
+    }
   }
-  }
+
+  const [url, setUrl] = useState("");
+  const [ytData, setYtData] = useState<YouTubeData | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleYoutubeData = async () => {
+    if (!url) {
+      setError("Please enter a YouTube URL");
+      toast.error("Please enter a YouTube URL")
+      return;
+    }
+    setYtData(null);
+    setLoading(true);
+    setError("");
+    setPdfText("");
+    setPdfName("");
+    try {
+      const response = await fetch('/api/youtube-loader', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const result = await response.json();
+      setYtData(result.docs[0]);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message || "An error occurred");
+      } else {
+        setError("An unknown error occurred");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="border-t p-4">
       <div className="w-full bg-primary/5 max-w-3xl mx-auto p-3 rounded-lg items-center flex flex-col gap-2">
-      {pdfName && (
-        <div className="self-start">
-                    <FileDisplay fileName={pdfName} onClear={handleFileRemove} />
-        </div>
-                )}
+        {pdfName ?
+          <div className="self-start">
+            <FileDisplay fileName={pdfName} onClear={handleFileRemove} />
+          </div>
+          :
+          ytData &&
+          <div className="self-start">
+            <FileDisplay fileName={ytData?.metadata.title} onClear={handleFileRemove} />
+          </div>
+        }
+
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
@@ -243,143 +308,166 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onToggleModel, cur
           className="w-full bg-transparent resize-none rounded-lg border-gray-300 p-3 outline-none min-h-[60px] max-h-[200px]"
           rows={2}
         />
-      <div className={`flex justify-between w-full ${
-         pathname === "/image" && "flex-col"
-      }`}>
-    {
-        pathname !== "/image" &&
-        <div className='flex justify-center items-center gap-2'>
-        <label
-             htmlFor="upload-pdf"
-             className="group cursor-pointer rounded-lg p-2 bg-black/5 dark:bg-white/5"
-             >
-             <Paperclip className="text-black/40 dark:text-white/40 group-hover:text-black dark:group-hover:text-white transition-colors" />
-           </label>
-           <input
-             id="upload-pdf"
-             type="file"
-             accept="application/pdf"
-             onChange={handleFileUpload}
-             className="hidden"
-             />
-           <TooltipBox content="Enhance Prompt">
-            <button onClick={handlePropmtEnchance} className='group cursor-pointer rounded-lg p-2 bg-black/5 dark:bg-white/5'>
-              <Sparkles className="text-black/40 dark:text-white/40 group-hover:text-black dark:group-hover:text-white transition-colors"/>
-            </button>
-           </TooltipBox>
-           <TooltipBox content="Switch to Search Model">
-          <button onClick={onToggleModel}>
-             <span className={`cursor-pointer rounded-full p-2 border bg-black/5 dark:bg-white/5 transition-all flex items-center gap-2 ${currentModel === "searchgpt" && "border bg-sky-500/15 border-sky-400 text-sky-500"}`}>
-             <div className="flex items-center justify-center flex-shrink-0">
-               <motion.div
-                 animate={{
-                     rotate: currentModel === "searchgpt" ? 180 : 0,
-                   scale: currentModel === "searchgpt" ? 1.1 : 1,
-                }}
-                 whileHover={{
-                     rotate: currentModel === "searchgpt" ? 180 : 15,
-                   scale: 1.1,
-                   transition: {
-                     type: "spring",
-                     stiffness: 300,
-                     damping: 10,
-                   },
-                }}
-                transition={{
-                    type: "spring",
-                    stiffness: 260,
-                   damping: 25,
-                 }}
-               >
-                 <Globe
-                   className={cn(
-                       currentModel === "searchgpt"
-                       ? "text-sky-500"
-                       : "text-black/40 dark:text-white/40 group-hover:text-black dark:group-hover:text-white transition-colors"
-                    )}
+        <div className={`flex justify-between w-full ${pathname === "/image" && "flex-col"
+          }`}>
+          {
+            pathname !== "/image" &&
+            <div className='flex justify-center items-center gap-2'>
+              <label
+                htmlFor="upload-pdf"
+                className="group cursor-pointer rounded-lg p-2 bg-black/5 dark:bg-white/5"
+              >
+                <Paperclip className="text-black/40 dark:text-white/40 group-hover:text-black dark:group-hover:text-white transition-colors" />
+              </label>
+              <input
+                id="upload-pdf"
+                type="file"
+                accept="application/pdf"
+                onChange={handleFileUpload}
+                className="hidden"
+              />
+
+              <TooltipBox content="Ask From YouTube Video">
+                <Drawer>
+                  <DrawerTrigger className="group cursor-pointer rounded-lg p-2 bg-black/5 dark:bg-white/5">
+                    <Link className="text-black/40 dark:text-white/40 group-hover:text-black dark:group-hover:text-white transition-colors" />
+                  </DrawerTrigger>
+                  <DrawerContent className='h-[10rem] rounded-t-2xl p-4'>
+                    <DrawerTitle>
+                    </DrawerTitle>
+                    <Input
+                      onChange={(e) => setUrl(e.target.value)}
+                      placeholder="Enter URL"
+                      className="mt-4"
                     />
-               </motion.div>
-             </div>
-             <AnimatePresence>
-               {currentModel === "searchgpt" && (
-                   <motion.span
-                   initial={{ width: 0, opacity: 0 }}
-                   animate={{
-                     width: "auto",
-                     opacity: 1,
-                   }}
-                   exit={{ width: 0, opacity: 0 }}
-                   transition={{ duration: 0.2 }}
-                   className="text-sm overflow-hidden whitespace-nowrap text-sky-500 flex-shrink-0"
-                 >
-                   Search
-                 </motion.span>
-               )}
-             </AnimatePresence>
-             </span>
-          </button>
-                   </TooltipBox>
-     </div>
-    }
-       <div className='flex justify-end items-center gap-2'>
-       <Drawer>
-          <DrawerTrigger className="">
-            <TooltipBox content="Voice Input">
-            <div className='group -mb-2 cursor-pointer rounded-lg p-2 bg-black/5 dark:bg-white/5'>
-              <Mic className="text-black/40 dark:text-white/40 group-hover:text-black dark:group-hover:text-white transition-colors"/>
-            </div>
-            </TooltipBox>
-          </DrawerTrigger>
-          <DrawerContent className='rounded-t-2xl'>
-            <DrawerTitle>
-            </DrawerTitle>
-            <div className="flex flex-row gap-5 my-3">
-              {/* Speech Recognition Section */}
-              <div className="flex-1 p-5 flex flex-col">
-                <div className="flex justify-center items-center mb-3"><Mic size={'2.5rem'} className='text-emerald-700' /></div>
-                <div className="flex-1 flex justify-center items-center overflow-y-auto break-words mb-3">
-                  {transcript ? transcript : "Transcription will appear here..."}
-                </div>
-                <div className="flex justify-center items-center space-x-3">
-                  {!isListening ? (
-                    <button
-                      onClick={startListening}
-                      className="rounded-full bg-green-500  text-white p-2 shadow-md hover:bg-green-600 transition"
-                    >
-                      <Mic />
-                    </button>
-                  ) : (
+                    {error && <p style={{ color: "red" }}>{error}</p>}
                     <DrawerClose asChild>
-                      <button
-                        onClick={stopListening}
-                        className="rounded-full bg-blue-500 text-white p-2 shadow-md hover:bg-blue-600 transition"
-                      >
-                        <Send />
-                      </button>
+                      <Button onClick={handleYoutubeData} className="block ml-auto mt-2">
+                        {loading ? "Loading..." : "Load Data"}
+                      </Button>
                     </DrawerClose>
-                  )}
-                  <DrawerClose asChild>
-                    <button
-                      onClick={clearTranscript}
-                      className="rounded-full bg-red-500 text-white p-2 shadow-md hover:bg-red-600 transition"
-                    >
-                      <XIcon />
-                    </button>
-                  </DrawerClose>
-                </div>
-              </div>
+                  </DrawerContent>
+                </Drawer>
+              </TooltipBox>
+
+              <TooltipBox content="Enhance Prompt">
+                <button onClick={handlePropmtEnchance} className='group cursor-pointer rounded-lg p-2 bg-black/5 dark:bg-white/5'>
+                  <Sparkles className="text-black/40 dark:text-white/40 group-hover:text-black dark:group-hover:text-white transition-colors" />
+                </button>
+              </TooltipBox>
+              <TooltipBox content="Switch to Search Model">
+                <button onClick={onToggleModel}>
+                  <span className={`cursor-pointer rounded-full p-2 border bg-black/5 dark:bg-white/5 transition-all flex items-center gap-2 ${currentModel === "searchgpt" && "border bg-sky-500/15 border-sky-400 text-sky-500"}`}>
+                    <div className="flex items-center justify-center flex-shrink-0">
+                      <motion.div
+                        animate={{
+                          rotate: currentModel === "searchgpt" ? 180 : 0,
+                          scale: currentModel === "searchgpt" ? 1.1 : 1,
+                        }}
+                        whileHover={{
+                          rotate: currentModel === "searchgpt" ? 180 : 15,
+                          scale: 1.1,
+                          transition: {
+                            type: "spring",
+                            stiffness: 300,
+                            damping: 10,
+                          },
+                        }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 260,
+                          damping: 25,
+                        }}
+                      >
+                        <Globe
+                          className={cn(
+                            currentModel === "searchgpt"
+                              ? "text-sky-500"
+                              : "text-black/40 dark:text-white/40 group-hover:text-black dark:group-hover:text-white transition-colors"
+                          )}
+                        />
+                      </motion.div>
+                    </div>
+                    <AnimatePresence>
+                      {currentModel === "searchgpt" && (
+                        <motion.span
+                          initial={{ width: 0, opacity: 0 }}
+                          animate={{
+                            width: "auto",
+                            opacity: 1,
+                          }}
+                          exit={{ width: 0, opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="text-sm overflow-hidden whitespace-nowrap text-sky-500 flex-shrink-0"
+                        >
+                          Search
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+                  </span>
+                </button>
+              </TooltipBox>
             </div>
-          </DrawerContent>
-        </Drawer>
-        <button
-          onClick={handleSend}
-          disabled={!input.trim()}
-          className="p-2 self-center bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-          <Send />
-        </button>
-       </div>
-      </div>
+          }
+          <div className='flex justify-end items-center gap-2'>
+            <Drawer>
+              <DrawerTrigger className="">
+                <TooltipBox content="Voice Input">
+                  <div className='group -mb-2 cursor-pointer rounded-lg p-2 bg-black/5 dark:bg-white/5'>
+                    <Mic className="text-black/40 dark:text-white/40 group-hover:text-black dark:group-hover:text-white transition-colors" />
+                  </div>
+                </TooltipBox>
+              </DrawerTrigger>
+              <DrawerContent className='rounded-t-2xl'>
+                <DrawerTitle>
+                </DrawerTitle>
+                <div className="flex flex-row gap-5 my-3">
+                  {/* Speech Recognition Section */}
+                  <div className="flex-1 p-5 flex flex-col">
+                    <div className="flex justify-center items-center mb-3"><Mic size={'2.5rem'} className='text-emerald-700' /></div>
+                    <div className="flex-1 flex justify-center items-center overflow-y-auto break-words mb-3">
+                      {transcript ? transcript : "Transcription will appear here..."}
+                    </div>
+                    <div className="flex justify-center items-center space-x-3">
+                      {!isListening ? (
+                        <button
+                          onClick={startListening}
+                          className="rounded-full bg-green-500  text-white p-2 shadow-md hover:bg-green-600 transition"
+                        >
+                          <Mic />
+                        </button>
+                      ) : (
+                        <DrawerClose asChild>
+                          <button
+                            onClick={stopListening}
+                            className="rounded-full bg-blue-500 text-white p-2 shadow-md hover:bg-blue-600 transition"
+                          >
+                            <Send />
+                          </button>
+                        </DrawerClose>
+                      )}
+                      <DrawerClose asChild>
+                        <button
+                          onClick={clearTranscript}
+                          className="rounded-full bg-red-500 text-white p-2 shadow-md hover:bg-red-600 transition"
+                        >
+                          <XIcon />
+                        </button>
+                      </DrawerClose>
+                    </div>
+                  </div>
+                </div>
+              </DrawerContent>
+            </Drawer>
+            <button
+              onClick={handleSend}
+              disabled={!input.trim()}
+              className="p-2 self-center bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Send />
+            </button>
+          </div>
+        </div>
       </div>
       <p className="text-center text-sm text-gray-500 mt-2">
         Press Enter to send, Shift + Enter for new line

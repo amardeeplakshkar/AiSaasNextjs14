@@ -102,7 +102,7 @@ const ImageComponent = () => {
                                             }}
                                         >
                                             <Loader size="2rem" className="animate-spin" />
-                                            <p className="text-xs">EDITH is Cooking...</p>
+                                            <p className="text-xs">DeepAI is Cooking...</p>
                                         </Skeleton>
                                     </AvatarFallback>
                                 </Avatar>
