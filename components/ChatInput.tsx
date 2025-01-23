@@ -7,7 +7,7 @@ import { File, Globe, Link, Loader2, Mic, Paperclip, Send, Sparkles, X, XIcon, Y
 import toast from 'react-hot-toast';
 import { useUser } from '@clerk/nextjs';
 import { ProModal } from './ProModal';
-import { Drawer, DrawerTrigger, DrawerContent, DrawerTitle, DrawerClose } from './ui/drawer';
+import { Drawer, DrawerTrigger, DrawerContent, DrawerTitle, DrawerClose, DrawerDescription } from './ui/drawer';
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
@@ -286,10 +286,10 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onToggleModel, cur
     }
   }
 
- 
+
 
   return (
-    <div className="border-t p-4">
+    <div className="border-t p-4" suppressHydrationWarning>
       <div className="w-full bg-primary/5 max-w-3xl mx-auto p-3 rounded-lg items-center flex flex-col gap-2">
         {pdfName ?
           <div className="self-start">
@@ -332,33 +332,41 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onToggleModel, cur
               <TooltipBox content="Ask From YouTube Video">
                 <Drawer>
                   <DrawerTrigger className="group cursor-pointer rounded-lg p-2 bg-black/5 dark:bg-white/5">
-                    <Link className="text-black/40 dark:text-white/40 group-hover:text-black dark:group-hover:text-white transition-colors" />
+                    <div className="text-black/40 dark:text-white/40 group-hover:text-black dark:group-hover:text-white transition-colors">
+                      {
+                        loading ?
+                          <Loader2 className="animate-spin cursor-not-allowed" /> :
+                          <Link />
+                      }
+                    </div>
                   </DrawerTrigger>
                   <DrawerContent className='h-[10rem] rounded-t-2xl p-4'>
                     <DrawerTitle>
                     </DrawerTitle>
+                    <DrawerDescription>
                     <Input
                       onChange={(e) => setUrl(e.target.value)}
                       placeholder="Enter URL"
                       className="mt-4"
                     />
-                    {error && <p style={{ color: "red" }}>{error}</p>}
                     <DrawerClose asChild>
                       <Button onClick={handleYoutubeData} className="block ml-auto mt-2">
                         {loading ? "Loading..." : "Load Data"}
                       </Button>
                     </DrawerClose>
+                    {error && <p style={{ color: "red" }}>{error}</p>}
+                    </DrawerDescription>
                   </DrawerContent>
                 </Drawer>
               </TooltipBox>
 
               <TooltipBox content="Enhance Prompt">
-                <button onClick={handlePropmtEnchance} className='group cursor-pointer rounded-lg p-2 bg-black/5 dark:bg-white/5'>
+                <div onClick={handlePropmtEnchance} className='group cursor-pointer rounded-lg p-2 bg-black/5 dark:bg-white/5'>
                   <Sparkles className="text-black/40 dark:text-white/40 group-hover:text-black dark:group-hover:text-white transition-colors" />
-                </button>
+                </div>
               </TooltipBox>
               <TooltipBox content="Switch to Search Model">
-                <button onClick={onToggleModel}>
+                <div onClick={onToggleModel}>
                   <span className={`cursor-pointer rounded-full p-2 border bg-black/5 dark:bg-white/5 transition-all flex items-center gap-2 ${currentModel === "searchgpt" && "border bg-sky-500/15 border-sky-400 text-sky-500"}`}>
                     <div className="flex items-center justify-center flex-shrink-0">
                       <motion.div
@@ -407,7 +415,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onToggleModel, cur
                       )}
                     </AnimatePresence>
                   </span>
-                </button>
+                </div>
               </TooltipBox>
             </div>
           }

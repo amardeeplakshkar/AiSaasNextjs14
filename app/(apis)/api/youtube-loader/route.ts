@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
-
+import { YoutubeLoader } from "@langchain/community/document_loaders/web/youtube";
 export async function POST(request: NextRequest) {
   try {
     const { url } = await request.json();
@@ -12,8 +12,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { YoutubeLoader } = await import("@langchain/community/document_loaders/web/youtube");
-
+   // Load YouTube data using the YouTubeLoader
     const loader = YoutubeLoader.createFromUrl(url, {
       language: "en",
       addVideoInfo: true,
