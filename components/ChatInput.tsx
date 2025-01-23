@@ -3,17 +3,19 @@
 import * as pdfjsLib from "pdfjs-dist";
 import "pdfjs-dist/build/pdf.worker.mjs";
 import React, { useState, KeyboardEvent, useRef, ChangeEvent } from 'react';
-import { File, Globe, Link, Loader2, Mic, Paperclip, Send, Sparkles, X, XIcon, YoutubeIcon } from 'lucide-react';
+import { Globe, Link, Loader2, Mic, Paperclip, Send, Sparkles, X, XIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useUser } from '@clerk/nextjs';
 import { ProModal } from './ProModal';
-import { Drawer, DrawerTrigger, DrawerContent, DrawerTitle, DrawerClose, DrawerDescription } from './ui/drawer';
+import { Drawer, DrawerTrigger, DrawerContent, DrawerTitle, DrawerClose } from './ui/drawer';
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
 import TooltipBox from "./Tooltip";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { FaFilePdf, FaYoutube } from "react-icons/fa";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "./ui/dialog";
 
 interface YouTubeData {
   metadata: {
@@ -37,8 +39,8 @@ const FileDisplay = ({ fileName, onClear }: FileDisplayProps) => (
   <div className="flex items-center gap-2 bg-black/5 dark:bg-white/5 w-fit px-3 py-1 rounded-lg group">
     {
       fileName.endsWith('.pdf') ?
-        <File className="w-4 h-4 dark:text-white" />
-        : <YoutubeIcon className="" />
+      <FaFilePdf size={24} className="dark:text-white" />
+      : <FaYoutube size={24}/>
     }
     <span className="text-sm dark:text-white line-clamp-1">{fileName}</span>
     <button
@@ -330,8 +332,8 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onToggleModel, cur
               />
 
               <TooltipBox content="Ask From YouTube Video">
-                <Drawer>
-                  <DrawerTrigger className="group cursor-pointer rounded-lg p-2 bg-black/5 dark:bg-white/5">
+                <Dialog>
+                  <DialogTrigger className="group cursor-pointer rounded-lg p-2 bg-black/5 dark:bg-white/5">
                     <div className="text-black/40 dark:text-white/40 group-hover:text-black dark:group-hover:text-white transition-colors">
                       {
                         loading ?
@@ -339,25 +341,25 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onToggleModel, cur
                           <Link />
                       }
                     </div>
-                  </DrawerTrigger>
-                  <DrawerContent className='h-[10rem] rounded-t-2xl p-4'>
-                    <DrawerTitle>
-                    </DrawerTitle>
-                    <DrawerDescription>
+                  </DialogTrigger>
+                  <DialogContent className='rounded-2xl p-4 w-[95%]'>
+                    <DialogTitle>
+                    </DialogTitle>
+                    <DialogDescription>
                     <Input
                       onChange={(e) => setUrl(e.target.value)}
                       placeholder="Enter URL"
                       className="mt-4"
                     />
-                    <DrawerClose asChild>
+                    <DialogClose asChild>
                       <Button onClick={handleYoutubeData} className="block ml-auto mt-2">
                         {loading ? "Loading..." : "Load Data"}
                       </Button>
-                    </DrawerClose>
+                    </DialogClose>
                     {error && <p style={{ color: "red" }}>{error}</p>}
-                    </DrawerDescription>
-                  </DrawerContent>
-                </Drawer>
+                    </DialogDescription>
+                  </DialogContent>
+                </Dialog>
               </TooltipBox>
 
               <TooltipBox content="Enhance Prompt">
