@@ -16,8 +16,8 @@ const LandingPage = () => {
           <div className="max-w-7xl mx-auto px-6 py-5">
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
-                <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-                  Connect, chat, and explore with <span className='bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 border-0 bg-clip-text text-transparent'>EDITH.</span>
+                <h1 className="text-4xl md:text-6xl capitalize font-bold text-white mb-6">
+                  Connect, chat, and explore Deeper with <span className='bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 border-0 bg-clip-text text-transparent'>DeepAI</span>
                 </h1>
                 <p className="text-gray-300 text-lg mb-8">
                   Experience a new way to chat — where conversations are smarter,

@@ -59,7 +59,7 @@ const ChatInterface = () => {
         </div>
         <div className="sm:mt-12 mt-2">
           <h1 className="text-chat-title text-white font-light sm:mb-8 mb-2">
-            Hi, what can EDITH<br />do to help you?
+            Hi, what can DeepAI<br />do to help you?
           </h1>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:mb-12 mb-2">

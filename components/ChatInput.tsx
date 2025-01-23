@@ -63,6 +63,48 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onToggleModel, cur
   const [pdfName, setPdfName] = useState<string>("");
   const pathname = usePathname()
 
+  const [url, setUrl] = useState("");
+  const [ytData, setYtData] = useState<YouTubeData | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleYoutubeData = async () => {
+    if (!url) {
+      setError("Please enter a YouTube URL");
+      toast.error("Please enter a YouTube URL")
+      return;
+    }
+    setYtData(null);
+    setLoading(true);
+    setError("");
+    setPdfText("");
+    setPdfName("");
+    try {
+      const response = await fetch('/api/youtube-loader', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const result = await response.json();
+      setYtData(result.docs[0]);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message || "An error occurred");
+      } else {
+        setError("An unknown error occurred");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const extractTextFromPDF = async (file: File) => {
     const fileArrayBuffer = await file.arrayBuffer();
     const pdf = await pdfjsLib.getDocument(fileArrayBuffer).promise;
@@ -244,47 +286,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onToggleModel, cur
     }
   }
 
-  const [url, setUrl] = useState("");
-  const [ytData, setYtData] = useState<YouTubeData | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  const handleYoutubeData = async () => {
-    if (!url) {
-      setError("Please enter a YouTube URL");
-      toast.error("Please enter a YouTube URL")
-      return;
-    }
-    setYtData(null);
-    setLoading(true);
-    setError("");
-    setPdfText("");
-    setPdfName("");
-    try {
-      const response = await fetch('/api/youtube-loader', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ url }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      const result = await response.json();
-      setYtData(result.docs[0]);
-    } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message || "An error occurred");
-      } else {
-        setError("An unknown error occurred");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
+ 
 
   return (
     <div className="border-t p-4">
