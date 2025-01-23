@@ -14,7 +14,7 @@ import { usePathname } from "next/navigation";
 import TooltipBox from "./Tooltip";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { FaFilePdf, FaYoutube } from "react-icons/fa";
+import { FaFilePdf } from "react-icons/fa";
 
 interface YouTubeData {
   metadata: {
@@ -36,11 +36,7 @@ interface FileDisplayProps {
 
 const FileDisplay = ({ fileName, onClear }: FileDisplayProps) => (
   <div className="flex items-center gap-2 bg-black/5 dark:bg-white/5 w-fit px-3 py-1 rounded-lg group">
-    {
-      fileName.endsWith('.pdf') ?
       <FaFilePdf size={24} className="dark:text-white" />
-      : <FaYoutube size={24}/>
-    }
     <span className="text-sm dark:text-white line-clamp-1">{fileName || "No file Name"}</span>
     <button
       type="button"
@@ -294,12 +290,12 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onToggleModel, cur
       <div className="w-full bg-primary/5 max-w-3xl mx-auto p-3 rounded-lg items-center flex flex-col gap-2">
         {pdfName ?
           <div className="self-start">
-            <FileDisplay fileName={pdfName} onClear={handleFileRemove} />
+            <FileDisplay fileName={pdfName || "No file Name"} onClear={handleFileRemove} />
           </div>
           :
           ytData &&
           <div className="self-start">
-            <FileDisplay fileName={ytData?.metadata.title} onClear={handleFileRemove} />
+            <FileDisplay fileName={ytData?.metadata.title || "No Title"} onClear={handleFileRemove} />
           </div>
         }
 
