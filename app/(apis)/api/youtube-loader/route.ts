@@ -5,7 +5,7 @@ export async function POST(request: NextRequest) {
   try {
     const { url } = await request.json();
 
-    if (!url || !url.startsWith("https://www.youtube.com/watch")) {
+    if (!url) {
       return NextResponse.json(
         { error: "Invalid YouTube URL" },
         { status: 400 }
