@@ -8,10 +8,10 @@ import 'katex/dist/katex.min.css';
 import SectionCard from '@/components/SectionCard';
 
 function App() {
-    const [currentModel, setCurrentModel] = useState<string>("openai");
+    const [currentModel, setCurrentModel] = useState<string>("openai-large");
     const latestMessageRef = useRef<HTMLDivElement | null>(null);
   const handleToggleModel = () => {
-    setCurrentModel((prevModel) => (prevModel === "openai" ? "searchgpt" : "openai"));
+    setCurrentModel((prevModel) => (prevModel === "openai-large" ? "searchgpt" : "openai-large"));
   };
   const { sendUserMessage, messages } = usePollinationsChat([
     {

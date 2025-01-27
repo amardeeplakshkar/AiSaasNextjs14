@@ -14,7 +14,7 @@ import { usePathname } from "next/navigation";
 import TooltipBox from "./Tooltip";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { FaFilePdf } from "react-icons/fa";
+import { FaRegFilePdf, FaYoutube } from "react-icons/fa";
 
 interface YouTubeData {
   metadata: {
@@ -26,7 +26,7 @@ interface YouTubeData {
 
 interface ChatInputProps {
   onSend: (message: string) => void;
-  currentModel?: string; 
+  currentModel?: string;
   onToggleModel?: () => void;
 }
 interface FileDisplayProps {
@@ -36,7 +36,11 @@ interface FileDisplayProps {
 
 const FileDisplay = ({ fileName, onClear }: FileDisplayProps) => (
   <div className="flex items-center gap-2 bg-black/5 dark:bg-white/5 w-fit px-3 py-1 rounded-lg group">
-      <FaFilePdf size={24} className="dark:text-white" />
+    {
+      fileName.endsWith(".pdf") ?
+        <FaRegFilePdf size={20} className="dark:text-white" />
+        : <FaYoutube size={24} className="dark:text-white" />
+    }
     <span className="text-sm dark:text-white line-clamp-1">{fileName || "No file Name"}</span>
     <button
       type="button"
@@ -264,6 +268,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onToggleModel, cur
     }
   };
 
+
   const handlePropmtEnchance = async () => {
     if (input.trim()) {
       toast("loading...", {
@@ -284,18 +289,24 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onToggleModel, cur
   }
 
 
+  const handleYtKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleYoutubeData();
+    }
+  };
 
   return (
     <div className="border-t p-4" suppressHydrationWarning>
       <div className="w-full bg-primary/5 max-w-3xl mx-auto p-3 rounded-lg items-center flex flex-col gap-2">
         {pdfName ?
           <div className="self-start">
-            <FileDisplay fileName={pdfName || "No file Name"} onClear={handleFileRemove} />
+            <FileDisplay fileName={pdfName || "Pdf File"} onClear={handleFileRemove} />
           </div>
           :
           ytData &&
           <div className="self-start">
-            <FileDisplay fileName={ytData?.metadata.title || "No Title"} onClear={handleFileRemove} />
+            <FileDisplay fileName={ytData?.metadata.title || "Youtube Video"} onClear={handleFileRemove} />
           </div>
         }
 
@@ -326,8 +337,8 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onToggleModel, cur
                 className="hidden"
               />
 
-              <TooltipBox content="Ask From YouTube Video">
-                <Drawer>
+              <Drawer>
+                <TooltipBox content="Ask From YouTube Video">
                   <DrawerTrigger className="group cursor-pointer rounded-lg p-2 bg-black/5 dark:bg-white/5">
                     <div className="text-black/40 dark:text-white/40 group-hover:text-black dark:group-hover:text-white transition-colors">
                       {
@@ -337,25 +348,37 @@ export const ChatInput: React.FC<ChatInputProps> = ({ onSend, onToggleModel, cur
                       }
                     </div>
                   </DrawerTrigger>
-                  <DrawerContent className='h-[10rem] rounded-t-2xl p-4'>
-                    <DrawerTitle>
-                    </DrawerTitle>
-                    <DrawerDescription>
+                </TooltipBox>
+                <DrawerContent className='rounded-t-2xl'>
+                  <DrawerTitle>
+                  </DrawerTitle>
+                  <DrawerDescription className="p-4">
+                  <div className="flex justify-center items-center m-2"><FaYoutube size={'2.5rem'} className='text-red-700' /></div>
                     <Input
                       onChange={(e) => setUrl(e.target.value)}
-                      placeholder="Enter URL"
+                      placeholder="Enter Youtube Video URL"
+                      type="url"
+                      onKeyDown={handleYtKeyPress}
                       className="mt-4"
                     />
-                    <DrawerClose asChild>
-                      <Button onClick={handleYoutubeData} className="block ml-auto mt-2">
-                        {loading ? "Loading..." : "Load Data"}
-                      </Button>
-                    </DrawerClose>
+                    <div className="flex items-center gap-2 justify-end">
+                      {ytData ?
+                        <Button onClick={handleFileRemove} className="block mt-2 bg-red-500 text-white hover:bg-red-600 transition-colors">
+                          Reset
+                        </Button> : ''}
+                      <DrawerClose asChild>
+                        <Button onClick={handleYoutubeData} className="mt-2">
+                          {
+                            loading ? <Loader2 className="animate-spin" /> :
+                              'Submit'
+                          }
+                        </Button>
+                      </DrawerClose>
+                    </div>
                     {error && <p style={{ color: "red" }}>{error}</p>}
-                    </DrawerDescription>
-                  </DrawerContent>
-                </Drawer>
-              </TooltipBox>
+                  </DrawerDescription>
+                </DrawerContent>
+              </Drawer>
 
               <TooltipBox content="Enhance Prompt">
                 <div onClick={handlePropmtEnchance} className='group cursor-pointer rounded-lg p-2 bg-black/5 dark:bg-white/5'>
