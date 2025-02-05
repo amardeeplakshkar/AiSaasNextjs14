@@ -11,10 +11,10 @@ interface ChatComponentProps {
 
 
 export function ChatComponent({ systemMessage }: ChatComponentProps) {
-    const [currentModel, setCurrentModel] = useState<string>("openai-large");
+    const [currentModel, setCurrentModel] = useState<string>("openai");
 
     const handleToggleModel = () => {
-      setCurrentModel((prevModel) => (prevModel === "openai-large" ? "searchgpt" : "openai-large"));
+      setCurrentModel((prevModel) => (prevModel === "openai" ? "searchgpt" : "openai"));
     };
     const PropmtMessage = `
         Your responses should be natural, casual, and engaging, similar to how a human would respond in everyday conversations.
